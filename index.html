@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -23,6 +23,7 @@
         <li><a href="#" id="worklink">Work</a></li>
         <li><a href="#" id="resumelink">Resume</a></li>
         <li><a href="#" id="playlink">Play</a></li>
+        <li><a href="#" id="writinglink">Writing</a></li>
         <li><a href="#" id="contactlink">Contact</a></li>
       </ul>
     </nav>
@@ -35,6 +36,31 @@
         <p>Here's some of my work</p>
         <img class="vector-line" src="assets/Vector 6.svg" alt="arrow" />
       </div>
+
+      <div class="project scrollContainer">
+        <img
+          class="project-image"
+          src="assets/portfolioimages/price insights.png"
+        />
+        <div class="project-description">
+          <h3>Feb 2025</h3>
+          <h1>Price Insights</h1>
+          <h4>
+            Is my property priced right? Helping users make informed decisions
+            when looking at properties for sale/rent
+          </h4>
+          <button
+            onclick="
+              window.open(
+                'https://santruptip.notion.site/Price-Insights-Is-this-property-priced-fairly-2fa23ffa7bea801a84fccaab4987acf0?source=copy_link',
+              )
+            "
+          >
+            Read Case Study
+          </button>
+        </div>
+      </div>
+
       <div class="project scrollContainer">
         <img class="project-image" src="assets/portfolioimages/map.png" />
         <div class="project-description">
@@ -45,7 +71,12 @@
             they are looking to buy/rent a new place
           </h4>
           <button
-            onclick="window.open('https://santruptip.notion.site/Maps-widget-18323ffa7bea80f8b6fcf96e3886c0a6?pvs=4', '_blank')"
+            onclick="
+              window.open(
+                'https://santruptip.notion.site/Maps-widget-18323ffa7bea80f8b6fcf96e3886c0a6?pvs=4',
+                '_blank',
+              )
+            "
           >
             Read Case Study
           </button>
@@ -64,7 +95,12 @@
             Tool to help manipulate data for better comparison and consumption
           </h4>
           <button
-            onclick="window.open('https://santruptip.notion.site/Table-pivot-d774f1db0def46769dae4d904a20eb55?pvs=4', '_blank')"
+            onclick="
+              window.open(
+                'https://santruptip.notion.site/Table-pivot-d774f1db0def46769dae4d904a20eb55?pvs=4',
+                '_blank',
+              )
+            "
           >
             Read Case Study
           </button>
@@ -84,7 +120,12 @@
             useful to increase sales
           </h4>
           <button
-            onclick="window.open('https://santruptip.notion.site/Key-Driver-Analysis-eb3a40b9c6554543a2953cd698f94091?pvs=4', '_blank')"
+            onclick="
+              window.open(
+                'https://santruptip.notion.site/Key-Driver-Analysis-eb3a40b9c6554543a2953cd698f94091?pvs=4',
+                '_blank',
+              )
+            "
           >
             Read Case Study
           </button>
@@ -94,7 +135,12 @@
       <div class="resume scrollContainer">
         <h1>Prefer to see a resume? I've got one!</h1>
         <button
-          onclick="window.open('https://drive.google.com/file/d/1fiCaWm3ruOP9xD98qCooCop8h9NhBtT5/view?usp=sharing', '_blank')"
+          onclick="
+            window.open(
+              'https://drive.google.com/file/d/1fiCaWm3ruOP9xD98qCooCop8h9NhBtT5/view?usp=sharing',
+              '_blank',
+            )
+          "
         >
           See resume
         </button>
@@ -179,7 +225,7 @@
             // }
           });
         },
-        { threshold: 0.5 } // Trigger when 50% of the .projectbeginning section is visible
+        { threshold: 0.5 }, // Trigger when 50% of the .projectbeginning section is visible
       );
 
       observer1.observe(projectBeginning);
@@ -196,7 +242,7 @@
             // }
           });
         },
-        { threshold: 0.5 } // Trigger when 50% of the .projectbeginning section is visible
+        { threshold: 0.5 }, // Trigger when 50% of the .projectbeginning section is visible
       );
       observer2.observe(aboutMe);
 
