@@ -4,7 +4,7 @@ html {
 
 body {
   margin: 80px;
-  background-image: url(assets/bgtexture.png);
+  background-image: url(assets/bgtexturefinal.jpg);
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -131,7 +131,9 @@ li {
   .blogpost {
     flex-direction: column;
     align-items: flex-start;
-    gap: 8px;
+    padding-left: 0px;
+    padding-right: 0px;
+    gap: 4px;
   }
 }
 
