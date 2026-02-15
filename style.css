@@ -403,3 +403,11 @@ h4 {
   height: 20px;
   width: 20px;
 }
+
+.blognamebox h3 {
+  font-family: "opensans", sans-serif;
+  font-weight: 700;
+  font-size: 48px;
+  color: #2a5aeb;
+  margin: 0;
+}
