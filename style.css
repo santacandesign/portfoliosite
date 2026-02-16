@@ -242,7 +242,10 @@ button {
   color: #ff4545;
   border: none;
   box-shadow: 10px 10px #ff4545;
-  transition: transform 0.3s ease, background-color 0.3s ease, color 0.3s ease,
+  transition:
+    transform 0.3s ease,
+    background-color 0.3s ease,
+    color 0.3s ease,
     box-shadow 0.3s ease; /* Ensure transition applies when hover is removed */
 }
 
@@ -289,7 +292,10 @@ h4 {
   font-size: 16px;
   border: none;
   box-shadow: 10px 10px #2a5aeb;
-  transition: transform 0.3s ease, background-color 0.3s ease, color 0.3s ease,
+  transition:
+    transform 0.3s ease,
+    background-color 0.3s ease,
+    color 0.3s ease,
     box-shadow 0.3s ease; /* Ensure transition applies when hover is removed */
 }
 
@@ -322,7 +328,7 @@ h4 {
 .playimgcontainer {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 40px;
   height: 80vh;
   margin-bottom: 0;
 }
