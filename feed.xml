@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0">
+  <channel>
+    <title>Santa writes to think</title>
+    <link>https://santacandesign.github.io/portfoliosite/blog.html</link>
+
+    <item>
+      <title>Please read Nagata Kabi</title>
+      <link>https://santacandesign.github.io/portfoliosite/nagatakabi.html</link>
+      <description>I'm obsessed with this Manga author, nobody knows about it SEND HELP</description>
+      <pubDate>Sat, 21 Feb 2026 15:48:00 GMT</pubDate>
+      <guid>https://santacandesign.github.io/portfoliosite/nagatakabi.html</guid>
+    </item>
+
+  </channel>
+</rss>
