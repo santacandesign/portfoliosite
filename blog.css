@@ -23,10 +23,6 @@ body {
   src: url(assets/Libre_Baskerville/LibreBaskerville-Italic-VariableFont_wght.ttf);
 }
 
-a {
-  text-decoration: none;
-}
-
 .back {
   font-family: "Libre italic", serif;
   text-decoration: underline;
@@ -71,6 +67,7 @@ h2 {
   text-decoration: none;
   flex: 1;
 }
+
 h3 {
   font-family: "Libre", serif;
   font-weight: 200;
@@ -104,6 +101,12 @@ li {
   margin-left: 20px;
   margin-bottom: 4px;
   list-style-type: decimal;
+}
+
+a {
+  color: #2b50bf;
+  font-family: "Libre italic", serif;
+  text-decoration: none;
 }
 
 /* Mobile phones (portrait) */
