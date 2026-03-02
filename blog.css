@@ -98,9 +98,14 @@ h5 {
 }
 
 li {
+  font-family: "Libre", serif;
   margin-left: 20px;
   margin-bottom: 4px;
   list-style-type: decimal;
+  font-weight: 200;
+  font-size: 14px;
+  line-height: 1.8;
+  color: #111111;
 }
 
 a {
