@@ -31,7 +31,7 @@ body {
   left: 0;
   right: 0;
   height: 60px;
-  background: #1b1213; /* Match your background-color */
+  background: #221516; /* Match your background-color */
   border: 1px solid #cc998533;
   z-index: 2000;
   cursor: pointer;
@@ -300,7 +300,7 @@ strong {
 /* Target the top two rows */
 .stats-table tr.top-tier {
   height: 70px; /* Nearly double the height */
-  background-color: #cc998510; /* Subtle rose tint background */
+  background-color: #cc99851a; /* Subtle rose tint background */
   transition: all 0.3s ease;
 }
 
@@ -308,7 +308,7 @@ strong {
 .stats-table tr.top-tier td {
   font-size: 1rem;
   font-weight: 200;
-  color: #cc9985; /* Use your cream highlight color */
+  color: #cc9985b5; /* Use your cream highlight color */
   border-bottom: 1px solid #cc99851a; /* Thicker border for the leaders */
 }
 

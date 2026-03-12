@@ -71,7 +71,7 @@ d3.json("data.json")
         .append("div")
         .attr("class", "diary-container")
         .html(
-          `<strong>My thoughts</strong><br>${diaryText}<br><br><strong>${impactScore.toFixed(2)}</strong><br>Impact score - Σ [(musical color)*(emotional intensity)]/n <br><br><strong>${volatility.toFixed(2)}</strong><br>Volatility index - <br> σ = √ (Σ (emotion intensity - emotional intensity mean)² /n)`,
+          `<strong>My thoughts</strong><br>${diaryText}<br><br><strong>${impactScore.toFixed(2)}</strong><br>Impact score - Σ [(musical richness)*(emotional intensity)]/n <br><br><strong>${volatility.toFixed(2)}</strong><br>Deviation in range of emotions - <br> σ = √ (Σ (emotion intensity - emotional intensity mean)² /n)`,
         );
 
       const statsContainer = contentRow
@@ -272,7 +272,7 @@ d3.json("data.json")
                 `
                 <div margin-bottom: 4px;"></div>
                 Time : ${d.timestamp} mins<br>
-                Musical Colour : ${d["musical colour"]}<br>
+                Musical richness : ${d["musical colour"]}<br>
                 Emotional Intensity : ${d["intensity of emotional response"]}
             `,
               )
@@ -356,7 +356,7 @@ function createStatsTable(data) {
   table.append("thead").append("tr").html(`
     <th>Song Name</th>
     <th>Impact Score</th>
-    <th>Volatility Index</th>
+    <th>Deviation in range of emotions</th>
   `);
 
   const tbody = table.append("tbody");
