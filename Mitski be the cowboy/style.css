@@ -1,0 +1,380 @@
+body {
+  background-color: #1b1213;
+  background-image: url(assets/bgtexturefinal.jpg);
+  background-blend-mode: multiply;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  color: #cc9985;
+  padding: 20px;
+  margin-top: 40px;
+}
+
+@font-face {
+  font-family: "Libre";
+  src: url(assets/Libre_Baskerville/LibreBaskerville-VariableFont_wght.ttf);
+}
+
+@font-face {
+  font-family: "Libre italic";
+  src: url(assets/Libre_Baskerville/LibreBaskerville-Italic-VariableFont_wght.ttf);
+}
+
+#global-nav-bar {
+  margin: 20px;
+  padding: 12px;
+  border-radius: 24px;
+  position: fixed;
+  align-items: center;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 60px;
+  background: #1b1213; /* Match your background-color */
+  border: 1px solid #cc998533;
+  z-index: 2000;
+  cursor: pointer;
+}
+
+/* The 'Active/Past' state: bright cream */
+.nav-segment.past path {
+  transition: all 0.3s ease;
+}
+
+/* The 'Future' state: muted rose
+.nav-segment path {
+  stroke: rgb(255, 0, 21);
+  stroke-width: 1px;
+  opacity: 1;
+} */
+
+.nav-segment:hover path {
+  stroke-width: 4px;
+  stroke: #faf1be !important;
+  filter: drop-shadow(0 0 5px #faf1be);
+  transition: all 0.2s ease;
+}
+
+/* Optional: Label that appears on hover */
+.nav-segment::after {
+  content: attr(data-song);
+  position: absolute;
+  bottom: 70px;
+  background: #392324;
+  color: #000000;
+  padding: 5px 10px;
+  border-radius: 4px;
+  display: none;
+}
+
+h1 {
+  margin-top: 20px;
+  font-family: "Libre italic", serif;
+  font-size: 3rem;
+  font-weight: 300;
+  text-align: center;
+  margin: auto;
+  max-width: 600px;
+}
+
+h3 {
+  font-family: "Libre italic", serif;
+  font-size: 0.7rem;
+  color: #cc9985;
+  line-height: 0;
+}
+
+p {
+  font-family: "Libre italic", serif;
+  text-align: left;
+}
+
+strong {
+  font-family: "Libre italic", serif;
+  font-size: 1.5rem;
+  color: #cc9985;
+}
+
+#intro-screen {
+  height: 75vh; /* Takes up 100% of the viewport height */
+  display: flex;
+  justify-content: center; /* Horizontal centering */
+  align-items: center; /* Vertical centering */
+  padding: 0 10%; /* Prevents text from hitting the screen edges */
+  text-align: center;
+}
+
+.intro-content {
+  max-width: 800px;
+}
+
+.intro-content p {
+  font-family: "Libre", serif;
+  font-size: 1rem; /* Large, readable size */
+  line-height: 1.8;
+  color: #cc9985; /* Your cream theme color */
+  margin: 0;
+}
+
+/* Subtle animation for the scroll hint */
+.scroll-indicator {
+  margin-top: 30px;
+  font-size: 2rem;
+  color: #cc9985; /* Your rose theme color */
+  animation: bounce 2s infinite;
+}
+
+@keyframes bounce {
+  0%,
+  20%,
+  50%,
+  80%,
+  100% {
+    transform: translateY(0);
+  }
+  40% {
+    transform: translateY(-10px);
+  }
+  60% {
+    transform: translateY(-5px);
+  }
+}
+
+#charts-container {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  justify-content: center;
+  margin: 0px;
+  margin-top: 30px;
+  margin-left: auto;
+  padding: 12px;
+  width: 80%;
+}
+
+.axis-label {
+  font-size: 10px;
+  fill: #cc9985;
+}
+
+.diary-container {
+  flex: 1; /* Takes up remaining space */
+  min-width: 300px;
+  font-family: "Libre", serif;
+  font-size: 0.8rem;
+  font-weight: 200;
+  line-height: 1.8;
+  background-color: #221516;
+  border-radius: 16px;
+  color: #cc9985;
+  padding: 16px;
+}
+
+/* Ensure D3 Axis lines and text are light enough to see */
+.domain,
+.tick line {
+  stroke: #523234 !important;
+}
+
+.tick text {
+  fill: #523234 !important;
+  font-family: "Libre", serif;
+}
+
+.chart-wrapper {
+  flex: 1 1 700px;
+  max-width: 900px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 900px;
+  padding: 0px;
+  margin-bottom: 8px;
+  border-bottom: 1px solid #cc998533;
+}
+
+.chart-column {
+  width: 100%; /* The container for the SVG */
+}
+
+.responsive-svg {
+  width: 100%; /* Scale to fill the column */
+  height: auto; /* Maintain the aspect ratio defined in viewBox */
+  display: block;
+}
+
+.song-title {
+  font-family: "Libre italic", serif;
+  font-size: 1.9rem; /* Larger for better visibility */
+  font-weight: 200;
+  color: #cc9985;
+  margin-bottom: 25px;
+  text-align: center;
+  width: 100%;
+  line-height: 1.4;
+}
+
+.content-row {
+  display: flex; /* Side-by-side for Chart and Diary */
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 40px;
+}
+
+.tooltip {
+  position: absolute;
+  text-align: left;
+  padding: 8px;
+  font-family: "Libre", serif;
+  font-size: 12px;
+  line-height: 1.6;
+  background: #392324; /* Match your background-color */
+  color: #cc9985;
+  border-radius: 12px;
+  pointer-events: none;
+  opacity: 0;
+  z-index: 1000;
+}
+
+.table-wrapper {
+  margin: 80px auto;
+  width: 90%;
+  max-width: 600px;
+}
+
+.summary-title {
+  color: #cc9985;
+  font-family: "Libre italic", serif;
+  font-weight: 200;
+  text-align: center;
+  margin-bottom: 30px;
+  letter-spacing: 1px;
+}
+
+.stats-table {
+  width: 100%;
+  border-collapse: collapse;
+  border-radius: 24px;
+  overflow: hidden;
+  color: #cc9985;
+  background-color: rgba(
+    0,
+    0,
+    0,
+    0.2
+  ); /* Slight contrast from body background */
+  position: relative;
+}
+
+.stats-table th {
+  padding: 15px;
+  text-align: left;
+  color: #cc9985;
+  font-size: 0.85rem;
+  font-family: "Libre italic", serif;
+  border-bottom: 1px solid #cc99851a;
+}
+
+.stats-table td {
+  padding: 15px;
+  border-bottom: 1px solid #cc99851a;
+  font-family: "Libre", serif;
+  font-size: 0.85rem;
+}
+
+.stats-table tr:hover {
+  background-color: rgba(250, 241, 190, 0.05);
+}
+
+/* Default row height */
+.stats-table tr {
+  height: 40px;
+}
+
+/* Target the top two rows */
+.stats-table tr.top-tier {
+  height: 70px; /* Nearly double the height */
+  background-color: #cc998510; /* Subtle rose tint background */
+  transition: all 0.3s ease;
+}
+
+/* Make the text bigger in the top tier to fill the space */
+.stats-table tr.top-tier td {
+  font-size: 1rem;
+  font-weight: 200;
+  color: #cc9985; /* Use your cream highlight color */
+  border-bottom: 1px solid #cc99851a; /* Thicker border for the leaders */
+}
+
+.stats-table tr.top-tier td:first-child {
+  padding-left: 16px; /* Extra room for that absolute-positioned star */
+  letter-spacing: 0.5px; /* Makes the song title take up more horizontal space */
+}
+
+.top-star {
+  color: #dacc7d; /* Using your bright cream color for the highlight */
+  font-size: 1.1rem;
+  margin-right: 4px;
+  text-shadow: 0 0 8px rgba(250, 241, 190, 0.4); /* Subtle glow to match the theme */
+}
+
+/* On small screens, stack them vertically */
+@media (max-width: 1100px) {
+  html {
+    overflow-x: hidden;
+  }
+
+  body {
+    width: 90vw;
+    margin: 0;
+    justify-content: center;
+  }
+
+  #intro-screen {
+    height: 60vh; /* Allow height to adjust based on content */
+  }
+
+  #charts-container {
+    width: 100%;
+    padding: 0px;
+    margin: 0px;
+    display: flex;
+    align-items: center;
+  }
+  .chart-wrapper {
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    padding: 0px;
+    margin: 0px 0px 0px 0px;
+  }
+
+  .content-row {
+    flex-direction: column;
+    justify-content: center;
+    gap: 20px;
+    margin: 0px 20px;
+  }
+
+  .song-title {
+    font-size: 1.5rem;
+  }
+
+  .diary-container {
+    font-size: 10px;
+  }
+
+  h1 {
+    margin-top: 40px;
+  }
+
+  strong {
+    font-size: 1.2rem;
+    font-weight: 400;
+  }
+
+  .responsive-svg {
+    max-width: 600px;
+  }
+}
