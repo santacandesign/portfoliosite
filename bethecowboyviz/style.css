@@ -237,6 +237,11 @@ strong {
   z-index: 1000;
 }
 
+#leaderboard-container {
+  width: 100%;
+  align-items: center;
+}
+
 .table-wrapper {
   margin: 80px auto;
   width: 90%;

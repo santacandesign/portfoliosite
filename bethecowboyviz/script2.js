@@ -344,7 +344,7 @@ function createStatsTable(data) {
   data.sort((a, b) => b.impact - a.impact);
 
   const tableWrapper = d3
-    .select("#charts-container")
+    .select("#leaderboard-container")
     .append("div")
     .attr("class", "table-wrapper");
   tableWrapper
