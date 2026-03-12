@@ -223,6 +223,31 @@ d3.json("data.json")
         .style("paint-order", "stroke fill")
         .attr("filter", "url(#dot-texture)");
 
+      // X-Axis Label: Time
+      svg
+        .append("text")
+        .attr("text-anchor", "middle")
+        .attr("x", width / 2)
+        .attr("y", height + 45) // Placed in the bottom margin
+        .attr("fill", "#cc9985")
+        .style("font-size", "12px")
+        // .style("font-style", "italic")
+        .style("font-family", "Libre, serif")
+        .text("Song timestamp (mins) →");
+
+      // Y-Axis Label: Resonance
+      svg
+        .append("text")
+        .attr("text-anchor", "middle")
+        .attr("transform", "rotate(-90)")
+        .attr("x", -height / 2)
+        .attr("y", -30) // Placed in the left margin
+        .attr("fill", "#cc9985")
+        .style("font-size", "12px")
+        // .style("font-style", "italic")
+        .style("font-family", "Libre, serif")
+        .text("Musical richness →");
+
       // 6. Tracker Line (Continuous)
       const trackerLine = svg
         .append("line")
