@@ -319,7 +319,7 @@ d3.json("data.json")
       const navXScale = d3
         .scaleLinear()
         .domain([0, data.length])
-        .range([0, window.innerWidth]);
+        .range([0, window.innerWidth - 72]);
       let totalPassedPoints = 0;
 
       let currentSongIndex = -1;
@@ -333,8 +333,6 @@ d3.json("data.json")
             songsArray.slice(0, index + 1),
             (d) => d[1].length,
           );
-          passpointcorrection = 1.3;
-          totalPassedPoints = totalPassedPoints - passpointcorrection; // Adjust for smoother transition
         }
       });
 

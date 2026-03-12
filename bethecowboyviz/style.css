@@ -90,6 +90,11 @@ p {
   text-align: left;
 }
 
+a {
+  color: #cc9985;
+  font-family: "Libre italic", serif;
+}
+
 strong {
   font-family: "Libre italic", serif;
   font-size: 1.5rem;
@@ -322,6 +327,27 @@ strong {
   font-size: 1.1rem;
   margin-right: 4px;
   text-shadow: 0 0 8px rgba(250, 241, 190, 0.4); /* Subtle glow to match the theme */
+}
+
+.end {
+  padding-bottom: 100px;
+  margin: 20px auto;
+  max-width: 300px;
+  color: #cc9985;
+}
+
+.end p {
+  font-family: "Libre", serif;
+  font-size: 0.9rem;
+  line-height: 1.8;
+}
+
+.end strong {
+  font-family: "Libre italic", serif;
+  font-size: 1.2rem;
+  font-weight: 400;
+  line-height: 3;
+  color: #cc9985;
 }
 
 /* On small screens, stack them vertically */
