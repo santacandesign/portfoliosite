@@ -1,12 +1,9 @@
-// Parse time strictly in Minutes:Seconds format
 const parseTime = d3.timeParse("%M:%S");
 
-// Set dimensions for individual charts
 const margin = { top: 30, right: 40, bottom: 60, left: 60 },
   width = 500 - margin.left - margin.right,
   height = 350 - margin.top - margin.bottom;
 
-// Remove any old tooltip and create a fresh one
 d3.select(".tooltip").remove();
 const tooltip = d3
   .select("body")
@@ -85,11 +82,8 @@ d3.json("data.json")
           "viewBox",
           `0 0 ${width + margin.left + margin.right} ${height + margin.top + margin.bottom}`,
         )
-        // These allow CSS to control the actual size
         .attr("preserveAspectRatio", "xMinYMin meet")
         .classed("responsive-svg", true)
-        // .attr("width", width + margin.left + margin.right)
-        // .attr("height", height + margin.top + margin.bottom)
         .append("g")
         .attr("transform", `translate(${margin.left},${margin.top})`);
 
@@ -142,7 +136,6 @@ d3.json("data.json")
         .domain([-0.2, 2.2])
         .range([height - 15, 15]);
 
-      // 1. The Bridge Line Generator (using a more fluid curve)
       const bridgeLine = d3
         .line()
         .x((d) => x(d.parsedTime))
@@ -215,11 +208,6 @@ d3.json("data.json")
         .attr("cy", (d) => y(d["musical colour"]))
         .attr("r", (d) => dotSize[d["intensity of emotional response"]] * 0.5)
         .attr("fill", "#FFA671")
-        // .attr("stroke", "#C94F44")
-        // .attr(
-        //   "stroke-width",
-        //   (d) => dotStroke[d["intensity of emotional response"]],
-        // )
         .style("paint-order", "stroke fill")
         .attr("filter", "url(#dot-texture)");
 
@@ -228,7 +216,7 @@ d3.json("data.json")
         .append("text")
         .attr("text-anchor", "middle")
         .attr("x", width / 2)
-        .attr("y", height + 45) // Placed in the bottom margin
+        .attr("y", height + 45)
         .attr("fill", "#cc9985")
         .style("font-size", "12px")
         // .style("font-style", "italic")
@@ -241,7 +229,7 @@ d3.json("data.json")
         .attr("text-anchor", "middle")
         .attr("transform", "rotate(-90)")
         .attr("x", -height / 2)
-        .attr("y", -30) // Placed in the left margin
+        .attr("y", -30)
         .attr("fill", "#cc9985")
         .style("font-size", "12px")
         // .style("font-style", "italic")
@@ -311,7 +299,6 @@ d3.json("data.json")
     // FINAL STEP: Draw the summary table after all charts are done
     createStatsTable(songScores);
     createGlobalNavigator(data);
-    // createStackedColumnChart(songScores);
     window.addEventListener("scroll", () => {
       const wrappers = document.querySelectorAll(".chart-wrapper");
       const navSegments = d3.selectAll(".nav-segment");
@@ -341,7 +328,6 @@ d3.json("data.json")
         .duration(400)
         .attr("width", navXScale(totalPassedPoints));
 
-      // Update segments (optional, since you want the connected line)
       d3.selectAll(".nav-segment").each(function (d, i) {
         d3.select(this).classed("past", i <= currentSongIndex);
       });
@@ -350,7 +336,6 @@ d3.json("data.json")
       navSegments.each(function (d, i) {
         const segment = d3.select(this);
         if (i <= currentSongIndex) {
-          // It's a "past" or "current" song
           segment.classed("past", true);
         } else {
           // It's a "future" song
@@ -404,7 +389,7 @@ function createGlobalNavigator(allData) {
   const navHeight = 60;
   const navWidth = window.innerWidth - 72;
 
-  // 1. Setup the container (Clear it first so it doesn't duplicate on refresh)
+  // 1. Setup the container
   let navContainer = d3.select("#global-nav-bar");
   if (navContainer.empty()) {
     navContainer = d3.select("body").append("div").attr("id", "global-nav-bar");
@@ -438,7 +423,7 @@ function createGlobalNavigator(allData) {
     .append("clipPath")
     .attr("id", "nav-clip")
     .append("rect")
-    .attr("width", 4) // This grows to reveal the 'past' line
+    .attr("width", 4)
     .attr("height", navHeight);
 
   // --- 1. DEFINE THE GLOW FILTER ---
@@ -462,7 +447,7 @@ function createGlobalNavigator(allData) {
     .domain([-0.2, 2.2])
     .range([navHeight - 8, 8]);
 
-  // 2. Draw the "Master Line" (The whole album as one stroke)
+  // 2. Draw the "Master Line"
   const lineGen = d3
     .line()
     .x((d, i) => x(i))
@@ -524,7 +509,7 @@ function createGlobalNavigator(allData) {
   songs.forEach(([name, sData], i) => {
     const segmentGroup = svg
       .append("g")
-      .attr("class", "nav-segment") // The scroll listener looks for this class
+      .attr("class", "nav-segment")
       .attr("id", `nav-seg-${i}`);
 
     // The individual path for this song
@@ -544,7 +529,6 @@ function createGlobalNavigator(allData) {
     const segmentWidth = x(offset + sData.length) - x(offset);
     const centerX = x(offset) + segmentWidth / 2;
 
-    // Draw the "Hidden" highlight path for this song
     const highlightPath = svg
       .append("path")
       .datum(sData)
@@ -558,8 +542,6 @@ function createGlobalNavigator(allData) {
           .curve(d3.curveMonotoneX),
       )
       .attr("fill", "none")
-      // .attr("stroke", "#442a2cff") // Default color
-      // .attr("stroke-width", 0)
       .style("opacity", 1);
 
     svg
@@ -595,7 +577,7 @@ function createGlobalNavigator(allData) {
         highlightPath
           .transition()
           .duration(200)
-          .attr("stroke", "#FAF1BE") // Changes to bright cream
+          .attr("stroke", "#FAF1BE")
           .attr("stroke-width", 4)
           .style("opacity", 1)
           .style("filter", "url(#nav-glow)");

@@ -31,23 +31,15 @@ body {
   left: 0;
   right: 0;
   height: 60px;
-  background: #221516; /* Match your background-color */
+  background: #221516;
   border: 1px solid #cc998533;
   z-index: 2000;
   cursor: pointer;
 }
 
-/* The 'Active/Past' state: bright cream */
 .nav-segment.past path {
   transition: all 0.3s ease;
 }
-
-/* The 'Future' state: muted rose
-.nav-segment path {
-  stroke: rgb(255, 0, 21);
-  stroke-width: 1px;
-  opacity: 1;
-} */
 
 .nav-segment:hover path {
   stroke-width: 4px;
@@ -56,7 +48,6 @@ body {
   transition: all 0.2s ease;
 }
 
-/* Optional: Label that appears on hover */
 .nav-segment::after {
   content: attr(data-song);
   position: absolute;
@@ -102,11 +93,11 @@ strong {
 }
 
 #intro-screen {
-  height: 75vh; /* Takes up 100% of the viewport height */
+  height: 75vh;
   display: flex;
-  justify-content: center; /* Horizontal centering */
-  align-items: center; /* Vertical centering */
-  padding: 0 10%; /* Prevents text from hitting the screen edges */
+  justify-content: center;
+  align-items: center;
+  padding: 0 10%;
   text-align: center;
 }
 
@@ -116,17 +107,16 @@ strong {
 
 .intro-content p {
   font-family: "Libre", serif;
-  font-size: 1rem; /* Large, readable size */
+  font-size: 1rem;
   line-height: 1.8;
-  color: #cc9985; /* Your cream theme color */
+  color: #cc9985;
   margin: 0;
 }
 
-/* Subtle animation for the scroll hint */
 .scroll-indicator {
   margin-top: 30px;
   font-size: 2rem;
-  color: #cc9985; /* Your rose theme color */
+  color: #cc9985;
   animation: bounce 2s infinite;
 }
 
@@ -164,7 +154,7 @@ strong {
 }
 
 .diary-container {
-  flex: 1; /* Takes up remaining space */
+  flex: 1;
   min-width: 300px;
   font-family: "Libre", serif;
   font-size: 0.8rem;
@@ -176,7 +166,6 @@ strong {
   padding: 16px;
 }
 
-/* Ensure D3 Axis lines and text are light enough to see */
 .domain,
 .tick line {
   stroke: #523234 !important;
@@ -200,18 +189,18 @@ strong {
 }
 
 .chart-column {
-  width: 100%; /* The container for the SVG */
+  width: 100%;
 }
 
 .responsive-svg {
-  width: 100%; /* Scale to fill the column */
-  height: auto; /* Maintain the aspect ratio defined in viewBox */
+  width: 100%;
+  height: auto;
   display: block;
 }
 
 .song-title {
   font-family: "Libre italic", serif;
-  font-size: 1.9rem; /* Larger for better visibility */
+  font-size: 1.9rem;
   font-weight: 200;
   color: #cc9985;
   margin-bottom: 25px;
@@ -221,7 +210,7 @@ strong {
 }
 
 .content-row {
-  display: flex; /* Side-by-side for Chart and Diary */
+  display: flex;
   flex-direction: row;
   align-items: flex-start;
   gap: 40px;
@@ -234,7 +223,7 @@ strong {
   font-family: "Libre", serif;
   font-size: 12px;
   line-height: 1.6;
-  background: #392324; /* Match your background-color */
+  background: #392324;
   color: #cc9985;
   border-radius: 12px;
   pointer-events: none;
@@ -268,12 +257,7 @@ strong {
   border-radius: 24px;
   overflow: hidden;
   color: #cc9985;
-  background-color: rgba(
-    0,
-    0,
-    0,
-    0.2
-  ); /* Slight contrast from body background */
+  background-color: rgba(0, 0, 0, 0.2);
   position: relative;
 }
 
@@ -297,36 +281,33 @@ strong {
   background-color: rgba(250, 241, 190, 0.05);
 }
 
-/* Default row height */
 .stats-table tr {
   height: 40px;
 }
 
-/* Target the top two rows */
 .stats-table tr.top-tier {
-  height: 70px; /* Nearly double the height */
-  background-color: #cc99851a; /* Subtle rose tint background */
+  height: 70px;
+  background-color: #cc99851a;
   transition: all 0.3s ease;
 }
 
-/* Make the text bigger in the top tier to fill the space */
 .stats-table tr.top-tier td {
   font-size: 1rem;
   font-weight: 200;
-  color: #cc9985b5; /* Use your cream highlight color */
-  border-bottom: 1px solid #cc99851a; /* Thicker border for the leaders */
+  color: #cc9985b5;
+  border-bottom: 1px solid #cc99851a;
 }
 
 .stats-table tr.top-tier td:first-child {
-  padding-left: 16px; /* Extra room for that absolute-positioned star */
-  letter-spacing: 0.5px; /* Makes the song title take up more horizontal space */
+  padding-left: 16px;
+  letter-spacing: 0.5px;
 }
 
 .top-star {
-  color: #dacc7d; /* Using your bright cream color for the highlight */
+  color: #dacc7d;
   font-size: 1.1rem;
   margin-right: 4px;
-  text-shadow: 0 0 8px rgba(250, 241, 190, 0.4); /* Subtle glow to match the theme */
+  text-shadow: 0 0 8px rgba(250, 241, 190, 0.4);
 }
 
 .end {
@@ -350,7 +331,6 @@ strong {
   color: #cc9985;
 }
 
-/* On small screens, stack them vertically */
 @media (max-width: 1100px) {
   html {
     overflow-x: hidden;
@@ -363,7 +343,7 @@ strong {
   }
 
   #intro-screen {
-    height: 60vh; /* Allow height to adjust based on content */
+    height: 60vh;
   }
 
   #charts-container {
