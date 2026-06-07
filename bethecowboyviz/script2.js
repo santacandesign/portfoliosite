@@ -283,10 +283,18 @@ d3.json("data.json")
             tooltip
               .html(
                 `
-                <div margin-bottom: 4px;"></div>
-                Time : ${d.timestamp} mins<br>
-                Musical richness : ${d["musical colour"]}<br>
-                Emotional Intensity : ${d["intensity of emotional response"]}
+                <div class="tooltip-row">
+                  <span class="tooltip-label">Time</span>
+                  <span class="tooltip-value">${d.timestamp} mins</span>
+                </div>
+                <div class="tooltip-row">
+                  <span class="tooltip-label">Musical richness</span>
+                  <span class="tooltip-value">${d["musical colour"]}</span>
+                </div>
+                <div class="tooltip-row">
+                  <span class="tooltip-label">Emotional intensity</span>
+                  <span class="tooltip-value">${d["intensity of emotional response"]}</span>
+                </div>
             `,
               )
               .style("left", event.pageX + 15 + "px")
