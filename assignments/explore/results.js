@@ -730,11 +730,15 @@ function addEventMarkers() {
     });
   });
 
-  // Concert venue pin (always visible immediately)
+  // Concert venue pin — same style as other event pins (purple dot + label)
   const concertEl = document.createElement('div');
-  concertEl.className = 'map-marker-concert';
-  concertEl.textContent = '🎤 Makuhari Messe';
-  new maplibregl.Marker({ element: concertEl, anchor: 'bottom' })
+  concertEl.className = 'map-marker-event-pin';
+  concertEl.innerHTML = `
+    <div class="empin-dot" style="background:#8B5CF6">
+      <svg viewBox="0 0 24 24"><path d="M12 3v10.55A4 4 0 1 0 14 17V7h4V3h-6z"/></svg>
+    </div>
+    <div class="empin-label">Makuhari Messe</div>`;
+  new maplibregl.Marker({ element: concertEl, anchor: 'left' })
     .setLngLat([140.0290, 35.6480])
     .addTo(eventMap);
   bounds.extend([140.0290, 35.6480]);
@@ -848,35 +852,49 @@ function initFlightsLoader() {
   if (flightsLoaderShown) return;
   flightsLoaderShown = true;
 
-  const loader  = document.getElementById('flLoader');
-  const msgEl   = document.getElementById('flLoaderMsg');
-  const barEl   = document.getElementById('flLoaderBar');
-  const content = document.getElementById('flContent');
-  if (!loader || !msgEl) return;
+  const loader    = document.getElementById('flLoader');
+  const checklist = document.getElementById('flChecklist');
+  const content   = document.getElementById('flContent');
+  if (!loader || !checklist) return;
 
-  const msgs = [
+  const items = [
     'Reading your plan — concert on Aug 28, 14 days in Tokyo…',
     'Checking outbound flights: BLR → NRT arriving before Aug 26…',
     'Scanning ±2 day windows · Found 31% cheaper options…',
-    'Curating return flights after Sep 8 · Done ✓',
+    'Curating return flights after Sep 8…',
   ];
-  let mi = 0;
-  msgEl.textContent = msgs[mi];
+
+  // Build checklist DOM
+  checklist.innerHTML = '';
+  const els = items.map(text => {
+    const row = document.createElement('div');
+    row.className = 'fl-check-item';
+    row.innerHTML = `
+      <div class="fl-check-circle">
+        <svg viewBox="0 0 12 10"><polyline points="1.5,5 4.5,8.5 10.5,1.5"/></svg>
+      </div>
+      <div class="fl-check-text">${text}</div>`;
+    checklist.appendChild(row);
+    return row;
+  });
+
   loader.style.display = 'flex';
 
-  // Cycle messages
-  const msgTimer = setInterval(() => {
-    mi = (mi + 1) % msgs.length;
-    msgEl.style.opacity = '0';
-    setTimeout(() => { msgEl.textContent = msgs[mi]; msgEl.style.opacity = '1'; }, 180);
-  }, 1800);
+  // Each item: appear at t=0,1400,2800,4200ms; tick 900ms after appearing
+  const APPEAR_INTERVAL = 1400;
+  const TICK_DELAY      = 900;
 
-  // Progress bar fills over the full loader duration
-  setTimeout(() => { if (barEl) barEl.style.width = '100%'; }, 80);
+  els.forEach((el, i) => {
+    // Appear
+    setTimeout(() => { el.classList.add('visible'); }, i * APPEAR_INTERVAL + 60);
+    // Tick
+    setTimeout(() => { el.classList.add('checked'); }, i * APPEAR_INTERVAL + TICK_DELAY);
+  });
 
-  // Dismiss
+  // Total: last tick at 4200 + 900 = 5100ms, then dismiss 600ms later
+  const dismissAt = els.length * APPEAR_INTERVAL + TICK_DELAY + 600;
+
   setTimeout(() => {
-    clearInterval(msgTimer);
     loader.style.opacity = '0';
     loader.style.transform = 'translateY(-8px)';
     loader.style.transition = 'opacity .4s, transform .4s';
@@ -886,7 +904,7 @@ function initFlightsLoader() {
       content.style.pointerEvents = '';
     }
     setTimeout(() => { loader.style.display = 'none'; }, 450);
-  }, 7200);
+  }, dismissAt);
 }
 
 /* ── HOTEL CARDS ────────────────────────────────────────────────── */
@@ -921,7 +939,7 @@ function renderHotelCard(h) {
           <div class="prop-rating-badge">★ ${h.rating}</div>
         </div>
         <div class="prop-meta-row">
-          <span class="prop-type-loc">${stars}-star ${type} · ${h.location}</span>
+          <span class="prop-type-loc">${h.location}</span>
           <span class="prop-reviews">${h.reviews} ratings</span>
         </div>
         <div class="prop-price-primary">
@@ -972,32 +990,42 @@ function initHotelsLoader() {
   if (hotelsLoaderShown) return;
   hotelsLoaderShown = true;
 
-  const loader  = document.getElementById('htLoader');
-  const msgEl   = document.getElementById('htLoaderMsg');
-  const barEl   = document.getElementById('htLoaderBar');
-  const content = document.getElementById('htContent');
-  if (!loader || !msgEl) return;
+  const loader    = document.getElementById('htLoader');
+  const checklist = loader?.querySelector('.ht-loader-checklist');
+  const content   = document.getElementById('htContent');
+  if (!loader || !checklist) return;
 
-  const msgs = [
+  const items = [
     'Checking your flight — landing at NRT on Aug 26…',
     'Finding hotels near Makuhari Messe concert venue…',
     'Matching proximity to your saved events…',
-    'Curating 5 categories across all budgets · Done ✓',
+    'Curating 5 categories across all budgets…',
   ];
-  let mi = 0;
-  msgEl.textContent = msgs[mi];
+
+  checklist.innerHTML = '';
+  const els = items.map(text => {
+    const row = document.createElement('div');
+    row.className = 'fl-check-item';
+    row.innerHTML = `
+      <div class="fl-check-circle">
+        <svg viewBox="0 0 12 10"><polyline points="1.5,5 4.5,8.5 10.5,1.5"/></svg>
+      </div>
+      <div class="fl-check-text">${text}</div>`;
+    checklist.appendChild(row);
+    return row;
+  });
+
   loader.style.display = 'flex';
 
-  const msgTimer = setInterval(() => {
-    mi = (mi + 1) % msgs.length;
-    msgEl.style.opacity = '0';
-    setTimeout(() => { msgEl.textContent = msgs[mi]; msgEl.style.opacity = '1'; }, 180);
-  }, 1800);
+  const APPEAR_INTERVAL = 1400;
+  const TICK_DELAY      = 900;
+  els.forEach((el, i) => {
+    setTimeout(() => el.classList.add('visible'), i * APPEAR_INTERVAL + 300);
+    setTimeout(() => el.classList.add('checked'), i * APPEAR_INTERVAL + 300 + TICK_DELAY);
+  });
 
-  setTimeout(() => { if (barEl) barEl.style.width = '100%'; }, 80);
-
+  const dismissAt = (els.length - 1) * APPEAR_INTERVAL + 300 + TICK_DELAY + 400;
   setTimeout(() => {
-    clearInterval(msgTimer);
     loader.style.opacity = '0';
     loader.style.transform = 'translateY(-8px)';
     loader.style.transition = 'opacity .4s, transform .4s';
@@ -1011,7 +1039,7 @@ function initHotelsLoader() {
       revealHotelsProgressively();
       setTimeout(() => initHotelMap(), 100);
     }, 450);
-  }, 7200);
+  }, dismissAt);
 }
 
 /* ── EVENT CARDS (Airbnb category sections) ────────────────────── */
@@ -1038,7 +1066,7 @@ function renderEventCard(e) {
           <div class="ec-rating-badge">★ ${e.rating}</div>
         </div>
         <div class="ec-meta-row">
-          <span class="ec-meta-loc">${e.meta} · ${e.location}</span>
+          <span class="ec-meta-loc">${e.location}</span>
           <span class="ec-reviews">${e.reviews}</span>
         </div>
         <div class="ec-price-row">
@@ -1718,10 +1746,13 @@ function updateTabBadges() {
 
   if (!planItems.length) { bar.classList.remove('visible'); return; }
 
+  const flightItem = planItems.find(it => it.type === 'flight');
+  const hotelItem  = planItems.find(it => it.type === 'hotel');
+
   const items = [];
-  if (hasFlight) items.push(`<span class="rbs-item done">Flights <span class="rbs-tick">${TICK_SVG}</span></span>`);
-  if (hasHotel)  items.push(`<span class="rbs-item done">Hotels <span class="rbs-tick">${TICK_SVG}</span></span>`);
-  if (evtCount)  items.push(`<span class="rbs-item done">${evtCount} Experience${evtCount !== 1 ? 's' : ''} <span class="rbs-tick">${TICK_SVG}</span></span>`);
+  if (flightItem) items.push(`<span class="rbs-item done">${flightItem.info.split(' · ').pop()} <span class="rbs-tick">${TICK_SVG}</span></span>`);
+  if (hotelItem)  items.push(`<span class="rbs-item done">Hotel <span class="rbs-tick">${TICK_SVG}</span></span>`);
+  if (evtCount)   items.push(`<span class="rbs-item done">${evtCount} Event${evtCount !== 1 ? 's' : ''} <span class="rbs-tick">${TICK_SVG}</span></span>`);
 
   status.innerHTML = items.join('<span style="color:var(--line);font-weight:300">|</span>');
   bar.classList.add('visible');
@@ -2091,11 +2122,30 @@ const BSEARCH_PLACEHOLDERS = {
 const BOOK_FLIGHTS_PROMPT = "I'm done exploring, I think I'm ready to book my flights";
 
 function initBottomSearch() {
+  const box      = document.getElementById('bsearchBox');
   const textarea = document.getElementById('bsearchInput');
   const send     = document.getElementById('bsearchSend');
-  if (!textarea || !send) return;
+  if (!box || !textarea || !send) return;
 
-  // Auto-grow
+  // ── Expand / collapse ──────────────────────────────────────────
+  let pinned = false;
+
+  function expandBox() { box.classList.add('expanded'); }
+  function collapseBox() { box.classList.remove('expanded'); pinned = false; }
+
+  // Hover → expand; leave → collapse only if not pinned
+  box.addEventListener('mouseenter', expandBox);
+  box.addEventListener('mouseleave', () => { if (!pinned) collapseBox(); });
+
+  // Any click inside pins it open
+  box.addEventListener('mousedown', () => { pinned = true; expandBox(); });
+
+  // Click outside → collapse + unpin
+  document.addEventListener('mousedown', e => {
+    if (!box.contains(e.target)) collapseBox();
+  });
+
+  // ── Auto-grow ──────────────────────────────────────────────────
   function autoGrow() {
     textarea.style.height = 'auto';
     textarea.style.height = Math.min(textarea.scrollHeight, 140) + 'px';
@@ -2105,12 +2155,14 @@ function initBottomSearch() {
 
   // Always pre-fill prompt on focus (user can edit after)
   textarea.addEventListener('focus', () => {
+    pinned = true;
+    expandBox();
     textarea.value = BOOK_FLIGHTS_PROMPT;
     textarea.setSelectionRange(textarea.value.length, textarea.value.length);
     autoGrow();
   });
 
-  // Send action — always navigates to flights tab
+  // ── Send ───────────────────────────────────────────────────────
   function doSearch() {
     const val = textarea.value.trim();
     if (!val) return;
@@ -2122,6 +2174,7 @@ function initBottomSearch() {
       send.innerHTML = `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/></svg>`;
       textarea.value = '';
       autoGrow();
+      collapseBox();
       const flightsBtn = document.querySelector('.tab-btn[data-tab="flights"]');
       if (flightsBtn) flightsBtn.click();
     }, 800);
@@ -2131,6 +2184,49 @@ function initBottomSearch() {
   textarea.addEventListener('keydown', e => {
     if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); doSearch(); }
   });
+}
+
+/* ── PAGE-LEVEL CHECKLIST LOADER ───────────────────────────────── */
+function initPageLoader() {
+  const loader = document.getElementById('pageLoader');
+  if (!loader) return;
+
+  const checklist = loader.querySelector('.page-loader-checklist');
+  const items = [
+    'Searching for flights around Aug 28 · BLR → NRT',
+    'Finding hotels near Makuhari Messe & Tokyo',
+    'Curating experiences for your 14-day stay',
+  ];
+
+  // Build checklist rows (reuse fl-check-* classes)
+  checklist.innerHTML = '';
+  const els = items.map(text => {
+    const row = document.createElement('div');
+    row.className = 'fl-check-item';
+    row.innerHTML = `
+      <div class="fl-check-circle">
+        <svg viewBox="0 0 12 10"><polyline points="1.5,5 4.5,8.5 10.5,1.5"/></svg>
+      </div>
+      <div class="fl-check-text">${text}</div>`;
+    checklist.appendChild(row);
+    return row;
+  });
+
+  // Appear: 300ms, 1700ms, 3100ms — Tick: 900ms after appear
+  const APPEAR_INTERVAL = 1400;
+  const TICK_DELAY      = 900;
+  els.forEach((el, i) => {
+    setTimeout(() => el.classList.add('visible'),  i * APPEAR_INTERVAL + 300);
+    setTimeout(() => el.classList.add('checked'),  i * APPEAR_INTERVAL + 300 + TICK_DELAY);
+  });
+
+  // Dismiss at ~4600ms (last tick at 3100+300+900=4300ms + 300ms grace)
+  const dismissAt = (els.length - 1) * APPEAR_INTERVAL + 300 + TICK_DELAY + 400;
+  setTimeout(() => {
+    loader.style.transition = 'opacity 0.5s ease';
+    loader.style.opacity    = '0';
+    setTimeout(() => { loader.style.display = 'none'; }, 520);
+  }, dismissAt);
 }
 
 /* ── INIT ──────────────────────────────────────────────────────── */
@@ -2158,6 +2254,7 @@ document.addEventListener('DOMContentLoaded', () => {
   renderFlights();
   renderHotels();
   renderEvents();
+  initPageLoader();
   initEventsLoader();
   setTimeout(() => initEventMap(), 60);
   initTabs();

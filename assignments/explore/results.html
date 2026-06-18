@@ -86,6 +86,15 @@
       </button>
     </div>
 
+    <!-- ══ PAGE LOAD CHECKLIST ══════════════════ -->
+    <div class="page-loader" id="pageLoader">
+      <div class="page-loader-inner">
+        <div class="fl-loader-icon">✦</div>
+        <div class="fl-loader-title">Planning your Tokyo trip</div>
+        <div class="page-loader-checklist"></div>
+      </div>
+    </div>
+
     <!-- ══ CONTENT ══════════════════════════════ -->
     <div class="content">
       <!-- ── FLIGHTS PANEL ──────────────────── -->
@@ -94,13 +103,8 @@
         <div class="fl-loader" id="flLoader" style="display: none">
           <div class="fl-loader-inner">
             <div class="fl-loader-icon">✦</div>
-            <div class="fl-loader-msg" id="flLoaderMsg"></div>
-            <div class="fl-loader-bar-wrap">
-              <div class="fl-loader-bar" id="flLoaderBar"></div>
-            </div>
-            <div class="fl-loader-sub">
-              Cross-referencing your plan · Checking Aug 26–Sep 8 · BLR → NRT
-            </div>
+            <div class="fl-loader-title">Finding your flights</div>
+            <div class="fl-checklist" id="flChecklist"></div>
           </div>
         </div>
 
@@ -261,14 +265,9 @@
         <!-- AI curation loader -->
         <div class="ht-loader" id="htLoader" style="display: none">
           <div class="ht-loader-inner">
-            <div class="ht-loader-icon">✦</div>
-            <div class="ht-loader-msg" id="htLoaderMsg"></div>
-            <div class="ht-loader-bar-wrap">
-              <div class="ht-loader-bar" id="htLoaderBar"></div>
-            </div>
-            <div class="ht-loader-sub">
-              Cross-referencing flight arrival · Concert venue · Aug 26–Sep 8
-            </div>
+            <div class="fl-loader-icon">✦</div>
+            <div class="fl-loader-title">Finding hotels for your Tokyo trip</div>
+            <div class="ht-loader-checklist"></div>
           </div>
         </div>
 
@@ -425,58 +424,62 @@
 
     <!-- ══ BOTTOM FREEFORM SEARCH ════════════════════════════════════ -->
     <div class="bottom-search" id="bottomSearch">
-      <div class="bsearch-box">
+      <div class="bsearch-box" id="bsearchBox">
         <div class="review-bar" id="reviewBar">
           <div class="review-bar-status" id="reviewBarStatus"></div>
           <button class="review-bar-btn" onclick="goToPlanTab()">
             Review &amp; Book →
           </button>
         </div>
-        <textarea
-          class="bsearch-textarea"
-          id="bsearchInput"
-          rows="2"
-          placeholder="Ask anything about your trip…"
-        >
-I'm going to the Hatsune Miku concert on August 28th, help me plan a 2 week trip around this</textarea
-        >
-        <div class="bsearch-footer">
-          <div class="bsearch-chips">
-            <button class="bsearch-chip">🗼 Tokyo</button>
-            <div class="bsearch-chip-sep"></div>
-            <button class="bsearch-chip">Aug 26 – Sep 8</button>
-            <div class="bsearch-chip-sep"></div>
-            <button class="bsearch-chip">2 guests</button>
+
+        <!-- ── Collapsed pill (default view) ── -->
+        <div class="bsearch-pill" id="bsearchPill">
+          <div class="bpill-chips">
+            <button class="bpill-chip">
+              🗼 Tokyo
+              <svg width="10" height="6" viewBox="0 0 10 6" fill="none"><polyline points="1,1 5,5 9,1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+            <div class="bpill-sep"></div>
+            <button class="bpill-chip">
+              Aug – Sep
+              <svg width="10" height="6" viewBox="0 0 10 6" fill="none"><polyline points="1,1 5,5 9,1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+            <div class="bpill-sep"></div>
+            <button class="bpill-chip">
+              2 guests
+              <svg width="10" height="6" viewBox="0 0 10 6" fill="none"><polyline points="1,1 5,5 9,1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
           </div>
-          <div class="bsearch-actions">
-            <button class="bsearch-hist" title="Explore">
-              <svg
-                width="16"
-                height="16"
-                viewBox="0 0 24 24"
-                fill="currentColor"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M12 2L9.5 5H4v2h1l1 3H4v1h1.5l-1 4H3v2h18v-2h-1.5l-1-4H20v-1h-2l1-3h1V5h-5.5L12 2zm0 2.5L13.5 7h-3L12 4.5zM7.07 7h9.86l-1 3H8.07l-1-3zm-.57 5h11l1 4H5.5l1-4z"
-                />
-              </svg>
-            </button>
-            <button class="bsearch-send" id="bsearchSend" title="Search">
-              <svg
-                width="15"
-                height="15"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2.5"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              >
-                <line x1="12" y1="19" x2="12" y2="5" />
-                <polyline points="5 12 12 5 19 12" />
-              </svg>
-            </button>
+          <button class="bpill-ai-btn">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.09 6.26L20.18 10l-6.09 1.74L12 18l-2.09-6.26L3.82 10l6.09-1.74L12 2z"/></svg>
+            AI assist
+          </button>
+        </div>
+
+        <!-- ── Expanded textarea (on hover / click) ── -->
+        <div class="bsearch-expanded-content" id="bsearchExpandedContent">
+          <textarea
+            class="bsearch-textarea"
+            id="bsearchInput"
+            rows="2"
+            placeholder="Ask anything about your trip…"
+          >I'm going to the Hatsune Miku concert on August 28th, help me plan a 2 week trip around this</textarea>
+          <div class="bsearch-footer">
+            <div class="bsearch-chips">
+              <button class="bsearch-chip">🗼 Tokyo</button>
+              <div class="bsearch-chip-sep"></div>
+              <button class="bsearch-chip">Aug 26 – Sep 8</button>
+              <div class="bsearch-chip-sep"></div>
+              <button class="bsearch-chip">2 guests</button>
+            </div>
+            <div class="bsearch-actions">
+              <button class="bsearch-send" id="bsearchSend" title="Search">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <line x1="12" y1="19" x2="12" y2="5" />
+                  <polyline points="5 12 12 5 19 12" />
+                </svg>
+              </button>
+            </div>
           </div>
         </div>
       </div>
