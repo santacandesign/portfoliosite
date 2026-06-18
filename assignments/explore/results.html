@@ -1,0 +1,488 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cleartrip · Tokyo Trip</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css"
+    />
+    <link rel="stylesheet" href="results.css" />
+  </head>
+  <body>
+    <!-- ══ HEADER ══════════════════════════════ -->
+    <header class="header">
+      <a class="logo" href="index.html">
+        <div class="logo-sq">
+          <svg viewBox="0 0 32 32" fill="none">
+            <path d="M6 16L16 6l10 10L16 26Z" fill="white" opacity=".9" />
+            <circle cx="16" cy="16" r="4" fill="#F4632E" />
+          </svg>
+        </div>
+        <span class="logo-name">cleartrip</span>
+      </a>
+      <nav class="header-tabs" id="headerTabs">
+        <div class="tab-indicator" id="tabIndicator"></div>
+        <button class="tab-btn" data-tab="flights">
+          <svg width="14" height="14" viewBox="0 0 20 20" fill="currentColor">
+            <path
+              d="M11 2.5a1.5 1.5 0 0 0-3 0v4.88L2.37 10.1A1 1 0 0 0 2 11v1.5a1 1 0 0 0 1.27.96L8 12.02V14.5l-1.5 1V17l3.5-.8 3.5.8v-1.5L12 14.5v-2.48l4.73 1.44A1 1 0 0 0 18 12.5V11a1 1 0 0 0-.37-.9L12 7.38V2.5z"
+            />
+          </svg>
+          Flights
+        </button>
+        <button class="tab-btn" data-tab="hotels">
+          <svg width="14" height="14" viewBox="0 0 20 20" fill="currentColor">
+            <path
+              d="M4 4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v12H4V4zm3 2a1 1 0 0 0 0 2h6a1 1 0 1 0 0-2H7zm-1 4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v4H6v-4zm2-1a1 1 0 0 0-1 1v1h2v-1a1 1 0 0 0-1-1zm4 0a1 1 0 0 0-1 1v1h2v-1a1 1 0 0 0-1-1z"
+            />
+          </svg>
+          Hotels
+        </button>
+        <button class="tab-btn active" data-tab="events">
+          <svg width="14" height="14" viewBox="0 0 20 20" fill="currentColor">
+            <path
+              d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 0 0 .95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 0 0-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 0 0-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 0 0-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 0 0 .951-.69l1.07-3.292z"
+            />
+          </svg>
+          Events & Restaurants
+        </button>
+        <button class="tab-btn" data-tab="plan" id="planTab">
+          <svg width="14" height="14" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd" d="M6 2a1 1 0 0 0-1 1v1H4a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2h-1V3a1 1 0 1 0-2 0v1H7V3a1 1 0 0 0-1-1zm0 5a1 1 0 0 0 0 2h8a1 1 0 1 0 0-2H6z" clip-rule="evenodd"/>
+          </svg>
+          My Plan
+        </button>
+      </nav>
+    </header>
+
+    <!-- ══ HORIZONTAL PLAN STRIP ════════════════ -->
+    <div class="hplan-strip" id="hplanStrip">
+      <div class="hps-scroll" id="hpsScroll">
+        <div class="hps-dates" id="hpsDates"></div>
+      </div>
+    </div>
+
+    <!-- ══ FIXED CTA BUTTON ══════════════════════ -->
+    <div class="hps-cta" id="hpsCta">
+      <button class="hps-cta-btn" id="hpsCtaBtn" onclick="goToPlanTab()">
+        Review &amp; book
+        <svg width="13" height="13" viewBox="0 0 20 20" fill="currentColor">
+          <path
+            fill-rule="evenodd"
+            d="M7.293 14.707a1 1 0 0 1 0-1.414L10.586 10 7.293 6.707a1 1 0 0 1 1.414-1.414l4 4a1 1 0 0 1 0 1.414l-4 4a1 1 0 0 1-1.414 0z"
+            clip-rule="evenodd"
+          />
+        </svg>
+      </button>
+    </div>
+
+    <!-- ══ CONTENT ══════════════════════════════ -->
+    <div class="content">
+      <!-- ── FLIGHTS PANEL ──────────────────── -->
+      <div class="panel" id="panel-flights">
+        <!-- AI curation loader (shown on first tab visit) -->
+        <div class="fl-loader" id="flLoader" style="display: none">
+          <div class="fl-loader-inner">
+            <div class="fl-loader-icon">✦</div>
+            <div class="fl-loader-msg" id="flLoaderMsg"></div>
+            <div class="fl-loader-bar-wrap">
+              <div class="fl-loader-bar" id="flLoaderBar"></div>
+            </div>
+            <div class="fl-loader-sub">
+              Cross-referencing your plan · Checking Aug 26–Sep 8 · BLR → NRT
+            </div>
+          </div>
+        </div>
+
+        <!-- Main content (revealed after loader) -->
+        <div
+          class="fl-content"
+          id="flContent"
+          style="opacity: 0; pointer-events: none"
+        >
+          <div class="from-to-row">
+            <div class="ft-field">
+              <span class="ft-icon">🛫</span>
+              <div class="ft-info">
+                <div class="ft-label">Flying from</div>
+                <input
+                  class="ft-input"
+                  id="ftFrom"
+                  value="BLR · Kempegowda Intl, Bangalore"
+                />
+              </div>
+            </div>
+            <button class="ft-swap" id="ftSwap" title="Swap">⇄</button>
+            <div class="ft-field">
+              <span class="ft-icon">🛬</span>
+              <div class="ft-info">
+                <div class="ft-label">Flying to</div>
+                <input
+                  class="ft-input"
+                  id="ftTo"
+                  value="NRT · Narita Intl, Tokyo"
+                />
+              </div>
+            </div>
+          </div>
+
+          <div class="filter-row">
+            <div class="f-pill" data-filter="stops">
+              Stops <span class="arr">▾</span>
+              <div class="f-drop">
+                <div class="fd-head">Number of stops</div>
+                <div class="fd-pills">
+                  <span class="fd-pill on">Non-stop</span
+                  ><span class="fd-pill">1 Stop</span
+                  ><span class="fd-pill">2+ Stops</span>
+                </div>
+              </div>
+            </div>
+            <div class="f-pill" data-filter="depart">
+              Departure <span class="arr">▾</span>
+              <div class="f-drop">
+                <div class="fd-head">Departure time</div>
+                <div class="fd-time-grid">
+                  <div class="fd-time on">
+                    <span class="fd-time-icon">🌙</span>Early morn<br /><small
+                      >12–6 AM</small
+                    >
+                  </div>
+                  <div class="fd-time">
+                    <span class="fd-time-icon">🌅</span>Morning<br /><small
+                      >6–12 PM</small
+                    >
+                  </div>
+                  <div class="fd-time">
+                    <span class="fd-time-icon">☀️</span>Afternoon<br /><small
+                      >12–6 PM</small
+                    >
+                  </div>
+                  <div class="fd-time">
+                    <span class="fd-time-icon">🌆</span>Evening<br /><small
+                      >6–12 AM</small
+                    >
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="f-pill" data-filter="airline">
+              Airlines <span class="arr">▾</span>
+              <div class="f-drop">
+                <div class="fd-head">Airlines</div>
+                <div class="fd-opts">
+                  <div class="fd-opt sel">
+                    <div class="fd-box"></div>
+                    Singapore Airlines
+                  </div>
+                  <div class="fd-opt sel">
+                    <div class="fd-box"></div>
+                    Air India
+                  </div>
+                  <div class="fd-opt">
+                    <div class="fd-box"></div>
+                    IndiGo + ANA
+                  </div>
+                  <div class="fd-opt">
+                    <div class="fd-box"></div>
+                    Emirates
+                  </div>
+                  <div class="fd-opt">
+                    <div class="fd-box"></div>
+                    Japan Airlines
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="f-pill" data-filter="price">
+              Price <span class="arr">▾</span>
+              <div class="f-drop">
+                <div class="fd-head">Price per person</div>
+                <div class="fd-range">
+                  <input
+                    type="range"
+                    min="20000"
+                    max="100000"
+                    value="70000"
+                    id="flightPriceRange"
+                  />
+                  <div class="fd-range-vals">
+                    <span>₹20k</span><span id="flightPriceVal">up to ₹70k</span
+                    ><span>₹1L</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="f-pill" data-filter="duration">
+              Duration <span class="arr">▾</span>
+              <div class="f-drop">
+                <div class="fd-head">Max flight duration</div>
+                <div class="fd-pills">
+                  <span class="fd-pill">Under 8h</span
+                  ><span class="fd-pill on">Under 12h</span
+                  ><span class="fd-pill">Any</span>
+                </div>
+              </div>
+            </div>
+            <div class="f-pill on">🧳 Free baggage ✓</div>
+          </div>
+
+          <div class="flights-scroll">
+            <!-- <div class="price-chart">
+        <div class="pc-top">
+          <div class="pc-title">Price forecast · BLR → NRT</div>
+          <span class="ai-pill">✦ AI insight</span>
+          <div class="pc-subtitle">Jun 9 – 15</div>
+        </div>
+        <div class="pc-grid" id="priceGrid"></div>
+        <div class="pc-tip">
+          <span>✦</span>
+          <span>Jun 11 (Wed) is the <strong>cheapest day</strong> — ₹38,400. Prices have risen 12% over the last 3 days. Book within 48 hrs.</span>
+        </div>
+      </div> -->
+            <div id="flightList"></div>
+          </div>
+        </div>
+        <!-- /fl-content -->
+      </div>
+
+      <!-- ── HOTELS PANEL ───────────────────── -->
+      <div class="panel" id="panel-hotels">
+        <!-- AI curation loader -->
+        <div class="ht-loader" id="htLoader" style="display: none">
+          <div class="ht-loader-inner">
+            <div class="ht-loader-icon">✦</div>
+            <div class="ht-loader-msg" id="htLoaderMsg"></div>
+            <div class="ht-loader-bar-wrap">
+              <div class="ht-loader-bar" id="htLoaderBar"></div>
+            </div>
+            <div class="ht-loader-sub">
+              Cross-referencing flight arrival · Concert venue · Aug 26–Sep 8
+            </div>
+          </div>
+        </div>
+
+        <!-- Main content revealed after loader -->
+        <div
+          class="ht-content"
+          id="htContent"
+          style="opacity: 0; pointer-events: none"
+        >
+          <div class="filter-row">
+            <div class="f-pill on">⭐ 4+ Stars</div>
+            <div class="f-pill" data-filter="hprice">
+              Price / night <span class="arr">▾</span>
+              <div class="f-drop">
+                <div class="fd-head">Price per night</div>
+                <div class="fd-range">
+                  <input
+                    type="range"
+                    min="2000"
+                    max="50000"
+                    value="20000"
+                    id="hotelPriceRange"
+                  />
+                  <div class="fd-range-vals">
+                    <span>₹2k</span><span id="hotelPriceVal">up to ₹20k</span
+                    ><span>₹50k</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="f-pill" data-filter="hrating">
+              Guest rating <span class="arr">▾</span>
+              <div class="f-drop">
+                <div class="fd-head">Minimum rating</div>
+                <div class="fd-pills">
+                  <span class="fd-pill">3.5+</span
+                  ><span class="fd-pill on">4.0+</span
+                  ><span class="fd-pill">4.5+</span>
+                </div>
+              </div>
+            </div>
+            <div class="f-pill" data-filter="hamenity">
+              Amenities <span class="arr">▾</span>
+              <div class="f-drop">
+                <div class="fd-head">Must-have amenities</div>
+                <div class="fd-opts">
+                  <div class="fd-opt sel">
+                    <div class="fd-box"></div>
+                    🏊 Pool
+                  </div>
+                  <div class="fd-opt sel">
+                    <div class="fd-box"></div>
+                    📶 Free WiFi
+                  </div>
+                  <div class="fd-opt">
+                    <div class="fd-box"></div>
+                    🏋️ Gym
+                  </div>
+                  <div class="fd-opt">
+                    <div class="fd-box"></div>
+                    🧖 Spa
+                  </div>
+                  <div class="fd-opt">
+                    <div class="fd-box"></div>
+                    🍳 Breakfast
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="f-pill" data-filter="htype">
+              Property type <span class="arr">▾</span>
+              <div class="f-drop">
+                <div class="fd-head">Property type</div>
+                <div class="fd-pills">
+                  <span class="fd-pill on">Hotel</span
+                  ><span class="fd-pill on">Resort</span>
+                  <span class="fd-pill">Ryokan</span
+                  ><span class="fd-pill">Villa</span>
+                </div>
+              </div>
+            </div>
+            <div class="f-pill" data-filter="harea">
+              Area <span class="arr">▾</span>
+              <div class="f-drop">
+                <div class="fd-head">Neighbourhood</div>
+                <div class="fd-opts">
+                  <div class="fd-opt sel">
+                    <div class="fd-box"></div>
+                    Shinjuku
+                  </div>
+                  <div class="fd-opt sel">
+                    <div class="fd-box"></div>
+                    Shibuya
+                  </div>
+                  <div class="fd-opt">
+                    <div class="fd-box"></div>
+                    Asakusa
+                  </div>
+                  <div class="fd-opt">
+                    <div class="fd-box"></div>
+                    Ginza
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="split-wrap">
+            <div class="split-left" id="hotelList"></div>
+            <div class="split-right">
+              <div id="hotel-map" class="real-map"></div>
+            </div>
+          </div>
+        </div>
+        <!-- /ht-content -->
+      </div>
+
+      <!-- ── EVENTS PANEL ───────────────────── -->
+      <div class="panel active" id="panel-events">
+        <!-- AI curation loader (dismissed by JS after ~2.5s) -->
+        <div class="ev-loader" id="evLoader">
+          <div class="ev-loader-inner">
+            <div class="ev-loader-icon">✦</div>
+            <div class="ev-loader-msg" id="evLoaderMsg"></div>
+            <div class="ev-loader-bar-wrap">
+              <div class="ev-loader-bar" id="evLoaderBar"></div>
+            </div>
+            <div class="ev-loader-sub">
+              Scanning 400+ experiences · Checking availability for Aug 26–Sep 8
+            </div>
+          </div>
+        </div>
+
+        <!-- Main events content (hidden until loader done) -->
+        <div
+          class="ev-content"
+          id="evContent"
+          style="opacity: 0; pointer-events: none"
+        >
+          <div class="ev-split">
+            <div class="ev-sections" id="eventList"></div>
+            <div class="split-right">
+              <div id="event-map" class="real-map"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── PLAN PANEL ─────────────────────── -->
+      <div class="panel" id="panel-plan">
+        <div class="plan-wrap" id="planWrap"></div>
+      </div>
+    </div>
+    <!-- /content -->
+
+    <!-- ══ BOTTOM FREEFORM SEARCH ════════════════════════════════════ -->
+    <div class="bottom-search" id="bottomSearch">
+      <div class="bsearch-box">
+        <div class="review-bar" id="reviewBar">
+          <div class="review-bar-status" id="reviewBarStatus"></div>
+          <button class="review-bar-btn" onclick="goToPlanTab()">Review &amp; Book →</button>
+        </div>
+        <textarea
+          class="bsearch-textarea"
+          id="bsearchInput"
+          rows="2"
+          placeholder="Ask anything about your trip…"
+        >
+I'm going to the Hatsune Miku concert on August 28th, help me plan a 2 week trip around this</textarea
+        >
+        <div class="bsearch-footer">
+          <div class="bsearch-chips">
+            <button class="bsearch-chip">🗼 Tokyo</button>
+            <div class="bsearch-chip-sep"></div>
+            <button class="bsearch-chip">Aug 26 – Sep 8</button>
+            <div class="bsearch-chip-sep"></div>
+            <button class="bsearch-chip">2 guests</button>
+          </div>
+          <div class="bsearch-actions">
+            <button class="bsearch-hist" title="Explore">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 2L9.5 5H4v2h1l1 3H4v1h1.5l-1 4H3v2h18v-2h-1.5l-1-4H20v-1h-2l1-3h1V5h-5.5L12 2zm0 2.5L13.5 7h-3L12 4.5zM7.07 7h9.86l-1 3H8.07l-1-3zm-.57 5h11l1 4H5.5l1-4z"/>
+              </svg>
+            </button>
+            <button class="bsearch-send" id="bsearchSend" title="Search">
+              <svg
+                width="15"
+                height="15"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <line x1="12" y1="19" x2="12" y2="5" />
+                <polyline points="5 12 12 5 19 12" />
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- old plan-strip removed -->
+
+    <!-- ══ BOOK FOOTER (plan tab only) ═══════════════════════════════ -->
+    <div class="plan-book-footer" id="planBookFooter">
+      <div class="pbf-info">
+        <div class="pbf-count" id="pbfCount">0 items selected</div>
+        <div class="pbf-desc">Jun 14 – Jun 18 · 2 guests</div>
+      </div>
+      <div class="pbf-total" id="pbfTotal"></div>
+      <button class="pbf-btn" onclick="bookEverything()">
+        Book Everything →
+      </button>
+    </div>
+
+    <script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
+    <script src="results.js"></script>
+  </body>
+</html>

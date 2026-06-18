@@ -1,0 +1,234 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cleartrip · Find your next trip</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <!-- ── HEADER ── -->
+    <header class="header">
+      <div class="logo">
+        <svg class="logo-icon" viewBox="0 0 32 32" fill="none">
+          <rect width="32" height="32" rx="10" fill="#F4632E" />
+          <path d="M8 16 L16 8 L24 16 L16 24 Z" fill="white" opacity=".9" />
+          <circle cx="16" cy="16" r="3.5" fill="#F4632E" />
+        </svg>
+        <span class="logo-name">cleartrip</span>
+      </div>
+
+      <nav class="nav">
+        <a class="nav-link" href="#">Flights</a>
+        <a class="nav-link" href="#">Hotels</a>
+        <a class="nav-link" href="#">Trains</a>
+        <a class="nav-link nav-link--active" href="#">Holidays ✦ AI</a>
+      </nav>
+
+      <div class="header-actions">
+        <button class="login-btn">Log in</button>
+        <button class="signup-btn">Sign up</button>
+      </div>
+    </header>
+
+    <!-- ── HERO ── -->
+    <main class="hero">
+      <div class="hero-inner">
+        <p class="hero-eyebrow">✦ AI Trip Planner</p>
+        <h1 class="hero-title">Where to next?</h1>
+        <p class="hero-sub">
+          Flights, hotels and experiences — planned together by AI
+        </p>
+
+        <!-- ── FREEFORM SEARCH BOX ── -->
+        <div class="search-box" id="searchBox">
+          <textarea
+            class="search-textarea"
+            id="searchTextarea"
+            placeholder="Tell me about your trip — a concert, a wedding, a holiday idea…"
+            rows="2"
+            spellcheck="false"
+          ></textarea>
+
+          <!-- footer row: Where/When/Who pill · send · history -->
+          <div class="search-footer">
+            <!-- unified Where / When / Who pill -->
+            <div class="sf-www-pill" id="sfChips">
+              <button class="sf-www" id="sfWhere" data-field="where">
+                <span id="sfWhereVal">Where</span
+                ><svg
+                  class="sf-caret"
+                  viewBox="0 0 10 6"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <polyline
+                    points="1,1 5,5 9,1"
+                    stroke="currentColor"
+                    stroke-width="1.5"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                </svg>
+              </button>
+              <div class="sf-www-sep"></div>
+              <button class="sf-www" id="sfWhen" data-field="when">
+                <span id="sfWhenVal">When</span
+                ><svg
+                  class="sf-caret"
+                  viewBox="0 0 10 6"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <polyline
+                    points="1,1 5,5 9,1"
+                    stroke="currentColor"
+                    stroke-width="1.5"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                </svg>
+              </button>
+              <div class="sf-www-sep"></div>
+              <button class="sf-www" id="sfWho" data-field="who">
+                <span id="sfWhoVal">Who</span
+                ><svg
+                  class="sf-caret"
+                  viewBox="0 0 10 6"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <polyline
+                    points="1,1 5,5 9,1"
+                    stroke="currentColor"
+                    stroke-width="1.5"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                </svg>
+              </button>
+            </div>
+
+            <!-- send + history on the right -->
+            <div class="sf-actions">
+              <button
+                class="sf-icon-btn sf-history"
+                id="historyBtn"
+                title="Search history"
+              >
+                <svg
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <circle cx="12" cy="12" r="10" />
+                  <polyline points="12 6 12 12 16 14" />
+                </svg>
+              </button>
+              <button class="sf-send-btn" id="sendBtn">
+                <svg
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <line x1="12" y1="19" x2="12" y2="5" />
+                  <polyline points="5 12 12 5 19 12" />
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <!-- sub-dropdowns anchored to the box -->
+          <div class="sf-drop" id="dropWhere">
+            <div class="drop-search-row">
+              <svg
+                class="drop-search-icon"
+                width="14"
+                height="14"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2.5"
+                stroke-linecap="round"
+              >
+                <circle cx="11" cy="11" r="8" />
+                <line x1="21" y1="21" x2="16.65" y2="16.65" />
+              </svg>
+              <input
+                class="drop-search-input"
+                id="destInput"
+                placeholder="Search destinations…"
+                autocomplete="off"
+              />
+            </div>
+            <div class="drop-section-label" id="destLabel">
+              Suggested destinations
+            </div>
+            <div class="dest-grid" id="destGrid"></div>
+          </div>
+
+          <div class="sf-drop sf-drop--when" id="dropWhen">
+            <div class="when-tabs" id="whenTabs">
+              <button class="when-tab when-tab--on" data-mode="exact">
+                Exact dates
+              </button>
+              <button class="when-tab" data-mode="flexible">
+                I'm flexible
+              </button>
+            </div>
+            <div id="calendarArea"></div>
+          </div>
+
+          <div class="sf-drop sf-drop--who" id="dropWho">
+            <div class="who-row">
+              <div class="who-info">
+                <div class="who-label">Adults</div>
+                <div class="who-sub">Ages 13+</div>
+              </div>
+              <div class="who-stepper">
+                <button class="who-btn" id="adultDown">−</button>
+                <span class="who-num" id="adultNum">1</span>
+                <button class="who-btn" id="adultUp">+</button>
+              </div>
+            </div>
+            <div class="who-row">
+              <div class="who-info">
+                <div class="who-label">Children</div>
+                <div class="who-sub">Ages 2–12</div>
+              </div>
+              <div class="who-stepper">
+                <button class="who-btn" id="childDown">−</button>
+                <span class="who-num" id="childNum">0</span>
+                <button class="who-btn" id="childUp">+</button>
+              </div>
+            </div>
+            <button class="who-done-btn" id="whoDone">Done</button>
+          </div>
+        </div>
+
+        <!-- history panel (hidden by default) -->
+        <div class="history-panel" id="historyPanel">
+          <div class="history-head">Recent searches</div>
+          <div class="history-list" id="historyList"></div>
+        </div>
+      </div>
+    </main>
+
+    <script src="app.js"></script>
+  </body>
+</html>
