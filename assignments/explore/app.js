@@ -321,13 +321,16 @@ function goToResults() {
   const hero = document.querySelector('.hero-inner');
 
   if (box) {
-    box.style.transition = 'transform .38s cubic-bezier(.4,0,.2,1), opacity .38s';
-    box.style.transform  = 'scale(0.92) translateY(-14px)';
+    const boxRect = box.getBoundingClientRect();
+    // Travel from current position down to the bottom of the viewport
+    const travelY = window.innerHeight - boxRect.top + 20;
+    box.style.transition = 'transform 0.42s cubic-bezier(0.4,0,0.2,1), opacity 0.28s 0.08s';
+    box.style.transform  = `translateY(${travelY}px)`;
     box.style.opacity    = '0';
   }
-  if (hero) { hero.style.transition = 'opacity .38s'; hero.style.opacity = '0'; }
+  if (hero) { hero.style.transition = 'opacity 0.25s'; hero.style.opacity = '0'; }
 
-  setTimeout(() => { window.location.href = 'results.html'; }, 360);
+  setTimeout(() => { window.location.href = 'results.html'; }, 420);
 }
 
 /* ── INIT ────────────────────────────────────────── */

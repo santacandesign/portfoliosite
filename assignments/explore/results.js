@@ -175,7 +175,7 @@ const HOTEL_CATEGORIES = [
     hotels: [
       { id:'h1', name:'Park Hyatt Tokyo',
         location:'Shinjuku · Tokyo',
-        img:'https://images.unsplash.com/photo-1566073771259-6a8506099945?w=700&q=80&auto=format&fit=crop',
+        img:'https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?w=700&q=80&auto=format&fit=crop',
         meta:'Pool · Spa · Rooftop bar · Aug 26–Sep 8',
         rating:'4.9', reviews:'2,341', price:'₹18,500', priceUnit:'/night',
         tag:'ai', tagText:'✦ AI top pick',
@@ -189,7 +189,7 @@ const HOTEL_CATEGORIES = [
         coords:[139.7004, 35.6941] },
       { id:'h2', name:'Cerulean Tower Tokyu',
         location:'Shibuya · Tokyo',
-        img:'https://images.unsplash.com/photo-1564501049412-61c2a3083791?w=700&q=80&auto=format&fit=crop',
+        img:'https://images.unsplash.com/photo-1578683010236-d716f9a3f461?w=700&q=80&auto=format&fit=crop',
         meta:'Rooftop panorama · Jazz bar · Aug 26–Sep 8',
         rating:'4.7', reviews:'1,820', price:'₹12,800', priceUnit:'/night',
         tag:'deal', tagText:'Best value',
@@ -204,7 +204,7 @@ const HOTEL_CATEGORIES = [
     hotels: [
       { id:'h7', name:'Dormy Inn Akihabara',
         location:'Akihabara · Tokyo',
-        img:'https://images.unsplash.com/photo-1578683010236-d716f9a3f461?w=600&q=80&auto=format&fit=crop',
+        img:'https://images.unsplash.com/photo-1503899036084-c55cdd92da26?w=600&q=80&auto=format&fit=crop',
         meta:'Onsen · Near Gundam Cafe · Aug 26–Sep 8',
         rating:'4.6', reviews:'5.4k', price:'₹5,400', priceUnit:'/night',
         tag:'ai', tagText:'✦ Near your events',
@@ -226,7 +226,7 @@ const HOTEL_CATEGORIES = [
     hotels: [
       { id:'h4', name:'Aman Tokyo',
         location:'Otemachi · Tokyo',
-        img:'https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?w=700&q=80&auto=format&fit=crop',
+        img:'https://images.unsplash.com/photo-1564501049412-61c2a3083791?w=700&q=80&auto=format&fit=crop',
         meta:'Urban sanctuary · Fine dining · Aug 26–Sep 8',
         rating:'4.9', reviews:'890', price:'₹38,000', priceUnit:'/night',
         tag:'ai', tagText:'Luxury pick',
@@ -238,7 +238,7 @@ const HOTEL_CATEGORIES = [
 const EVENTS = [
   { id:'e1', name:'Senso-ji Temple & Nakamise',
     location:'Asakusa · Tokyo',
-    img:'https://images.unsplash.com/photo-1545569341-9eb8b30979d9?w=700&q=80&auto=format&fit=crop',
+    img:'https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?w=700&q=80&auto=format&fit=crop',
     meta:'Half day · Culture · Street food',
     rating:'4.8', reviews:'8.2k', price:'Free',
     tag:'ai', tagText:'✦ AI pick · Hidden tips',
@@ -252,7 +252,7 @@ const EVENTS = [
     coords:[139.7330, 35.6654] },
   { id:'e3', name:'Mt. Fuji Day Trip',
     location:'Hakone · Day trip',
-    img:'https://images.unsplash.com/photo-1490806843957-31f4c9a91c65?w=700&q=80&auto=format&fit=crop',
+    img:'https://images.unsplash.com/photo-1480796927426-f609979314bd?w=700&q=80&auto=format&fit=crop',
     meta:'Full day · Guided · Hotel pickup',
     rating:'4.7', reviews:'3.1k', price:'₹5,800',
     tag:null, tagText:null,
@@ -266,7 +266,7 @@ const EVENTS = [
     coords:[139.7706, 35.6654] },
   { id:'e5', name:'Edo Castle & Imperial Palace',
     location:'Marunouchi · Tokyo',
-    img:'https://images.unsplash.com/photo-1488702823827-df2beea4b3f7?w=700&q=80&auto=format&fit=crop',
+    img:'https://images.unsplash.com/photo-1593999456421-f000e4d87748?w=700&q=80&auto=format&fit=crop',
     meta:'Half day · Free entry · History',
     rating:'4.6', reviews:'4.2k', price:'Free',
     tag:null, tagText:null,
@@ -282,7 +282,7 @@ const EVENT_CATEGORIES = [
     events:[
       { id:'ca1', name:'Makuhari Seaside Park',
         location:'Mihama-ku · Chiba',
-        img:'https://images.unsplash.com/photo-1551918120-9739cb430c6d?w=600&q=80&auto=format&fit=crop',
+        img:'https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=600&q=80&auto=format&fit=crop',
         meta:'Free · 20 min from venue · Walk & relax pre-show',
         rating:'4.6', reviews:'2.1k', price:'Free',
         tag:'anchor', tagText:'🎤 Concert day',
@@ -317,14 +317,14 @@ const EVENT_CATEGORIES = [
     events:[
       { id:'ft1', name:'Senso-ji Temple & Nakamise',
         location:'Asakusa · Tokyo',
-        img:'https://images.unsplash.com/photo-1545569341-9eb8b30979d9?w=600&q=80&auto=format&fit=crop',
+        img:'https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?w=600&q=80&auto=format&fit=crop',
         meta:'Half day · Culture · Street food',
         rating:'4.8', reviews:'8.2k', price:'Free',
         tag:'ai', tagText:'✦ Top pick',
         coords:[139.7967,35.7148] },
       { id:'ft2', name:'Meiji Shrine & Forest Walk',
         location:'Harajuku · Tokyo',
-        img:'https://images.unsplash.com/photo-1478436127897-769e1b3f0f36?w=600&q=80&auto=format&fit=crop',
+        img:'https://images.unsplash.com/photo-1528360983277-13d401cdc186?w=600&q=80&auto=format&fit=crop',
         meta:'2 hrs · Peaceful ancient cedar forest',
         rating:'4.7', reviews:'6.8k', price:'Free',
         tag:null, tagText:null,
@@ -338,7 +338,7 @@ const EVENT_CATEGORIES = [
         coords:[139.7006,35.6591] },
       { id:'ft4', name:'Ueno Park & Street Performers',
         location:'Ueno · Tokyo',
-        img:'https://images.unsplash.com/photo-1553621042-f6e147245754?w=600&q=80&auto=format&fit=crop',
+        img:'https://images.unsplash.com/photo-1578271887552-5ac3a72752bc?w=600&q=80&auto=format&fit=crop',
         meta:'Half day · Zoo · Temples · Cherry trees',
         rating:'4.6', reviews:'9.1k', price:'Free',
         tag:null, tagText:null,
@@ -352,7 +352,7 @@ const EVENT_CATEGORIES = [
     events:[
       { id:'ac1', name:'Gundam Cafe Akihabara',
         location:'Akihabara · Tokyo',
-        img:'https://images.unsplash.com/photo-1578632767115-351597cf2477?w=600&q=80&auto=format&fit=crop',
+        img:'https://images.unsplash.com/photo-1535016120720-40c646be5580?w=600&q=80&auto=format&fit=crop',
         meta:'1.5 hrs · Themed drinks & merch shop',
         rating:'4.4', reviews:'3.2k', price:'₹1,800',
         tag:'ai', tagText:'✦ Miku fans love this',
@@ -387,7 +387,7 @@ const EVENT_CATEGORIES = [
     events:[
       { id:'dt1', name:'Mt. Fuji & Kawaguchiko Lake',
         location:'Hakone · 2 hrs from Tokyo',
-        img:'https://images.unsplash.com/photo-1490806843957-31f4c9a91c65?w=600&q=80&auto=format&fit=crop',
+        img:'https://images.unsplash.com/photo-1480796927426-f609979314bd?w=600&q=80&auto=format&fit=crop',
         meta:'Full day · Guided · Hotel pickup',
         rating:'4.7', reviews:'3.1k', price:'₹5,800',
         tag:'ai', tagText:'✦ Must do',
@@ -401,7 +401,7 @@ const EVENT_CATEGORIES = [
         coords:[139.5997,36.7483] },
       { id:'dt3', name:'Kamakura Giant Buddha & Temples',
         location:'Kamakura · 1 hr from Tokyo',
-        img:'https://images.unsplash.com/photo-1519998071095-fccdb5e1f9d7?w=600&q=80&auto=format&fit=crop',
+        img:'https://images.unsplash.com/photo-1602143407151-7111542de6e8?w=600&q=80&auto=format&fit=crop',
         meta:'Half day · Temples · Beach',
         rating:'4.6', reviews:'4.8k', price:'₹800',
         tag:null, tagText:null,
@@ -869,9 +869,9 @@ function initFlightsLoader() {
     mi = (mi + 1) % msgs.length;
     msgEl.style.opacity = '0';
     setTimeout(() => { msgEl.textContent = msgs[mi]; msgEl.style.opacity = '1'; }, 180);
-  }, 650);
+  }, 1800);
 
-  // Progress bar
+  // Progress bar fills over the full loader duration
   setTimeout(() => { if (barEl) barEl.style.width = '100%'; }, 80);
 
   // Dismiss
@@ -886,7 +886,7 @@ function initFlightsLoader() {
       content.style.pointerEvents = '';
     }
     setTimeout(() => { loader.style.display = 'none'; }, 450);
-  }, 2800);
+  }, 7200);
 }
 
 /* ── HOTEL CARDS ────────────────────────────────────────────────── */
@@ -992,7 +992,7 @@ function initHotelsLoader() {
     mi = (mi + 1) % msgs.length;
     msgEl.style.opacity = '0';
     setTimeout(() => { msgEl.textContent = msgs[mi]; msgEl.style.opacity = '1'; }, 180);
-  }, 650);
+  }, 1800);
 
   setTimeout(() => { if (barEl) barEl.style.width = '100%'; }, 80);
 
@@ -1011,7 +1011,7 @@ function initHotelsLoader() {
       revealHotelsProgressively();
       setTimeout(() => initHotelMap(), 100);
     }, 450);
-  }, 2800);
+  }, 7200);
 }
 
 /* ── EVENT CARDS (Airbnb category sections) ────────────────────── */
@@ -1228,25 +1228,28 @@ function flyToStrip(cardEl, onComplete, _targetEl) {
     overflow:     'hidden',
     boxShadow:    '0 8px 32px rgba(0,0,0,.22)',
     pointerEvents:'none',
+    transform:    'scale(1)',
+    transition:   'none',
+    willChange:   'transform, opacity',
   });
   ghost.querySelectorAll('button, input').forEach(el => el.remove());
   document.body.appendChild(ghost);
 
+  // Force the browser to commit the initial paint before animating
+  ghost.getBoundingClientRect();
+
   const dx = targetX - (cardRect.left + cardRect.width  / 2);
   const dy = targetY - (cardRect.top  + cardRect.height / 2);
 
+  // Double-rAF guarantees initial styles are flushed before the transition starts
   requestAnimationFrame(() => {
-    ghost.style.transition = 'transform .15s ease, box-shadow .15s';
-    ghost.style.transform  = 'scale(1.04) translateY(-6px)';
-    ghost.style.boxShadow  = '0 20px 60px rgba(0,0,0,.3)';
+    requestAnimationFrame(() => {
+      ghost.style.transition   = 'transform .5s cubic-bezier(.4,0,.2,1), opacity .35s ease, border-radius .5s';
+      ghost.style.transform    = `translate(${dx}px,${dy}px) scale(.04)`;
+      ghost.style.opacity      = '0';
+      ghost.style.borderRadius = '50%';
+    });
   });
-
-  setTimeout(() => {
-    ghost.style.transition    = 'all .48s cubic-bezier(.4,0,.2,1)';
-    ghost.style.transform     = `translate(${dx}px,${dy}px) scale(.04)`;
-    ghost.style.opacity       = '0';
-    ghost.style.borderRadius  = '50%';
-  }, 140);
 
   setTimeout(() => {
     ghost.remove();
@@ -1257,7 +1260,7 @@ function flyToStrip(cardEl, onComplete, _targetEl) {
       bar.classList.add('review-bar--pulse');
       setTimeout(() => bar.classList.remove('review-bar--pulse'), 500);
     }
-  }, 640);
+  }, 560);
 }
 
 /* ── FLY TO TAB ANIMATION (kept for reference) ─────────────────── */
@@ -2024,7 +2027,7 @@ function initEventsLoader() {
     }
     setTimeout(() => loader.remove(), 450);
     setTimeout(() => revealEventsProgressively(), 200);
-  }, 2600);
+  }, 4000);
 }
 
 /* ── TABS ──────────────────────────────────────────────────────── */
@@ -2085,6 +2088,8 @@ const BSEARCH_PLACEHOLDERS = {
   plan:    '"Move the hotel to Aug 27" · "Add a free day" · "What\'s missing?"',
 };
 
+const BOOK_FLIGHTS_PROMPT = "I'm done exploring, I think I'm ready to book my flights";
+
 function initBottomSearch() {
   const textarea = document.getElementById('bsearchInput');
   const send     = document.getElementById('bsearchSend');
@@ -2098,16 +2103,28 @@ function initBottomSearch() {
   textarea.addEventListener('input', autoGrow);
   autoGrow();
 
-  // Send action
+  // Always pre-fill prompt on focus (user can edit after)
+  textarea.addEventListener('focus', () => {
+    textarea.value = BOOK_FLIGHTS_PROMPT;
+    textarea.setSelectionRange(textarea.value.length, textarea.value.length);
+    autoGrow();
+  });
+
+  // Send action — always navigates to flights tab
   function doSearch() {
     const val = textarea.value.trim();
     if (!val) return;
     send.style.background = 'var(--brand)';
     send.innerHTML = '✓';
+    textarea.blur();
     setTimeout(() => {
-      send.innerHTML = `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/></svg>`;
       send.style.background = '';
-    }, 1200);
+      send.innerHTML = `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/></svg>`;
+      textarea.value = '';
+      autoGrow();
+      const flightsBtn = document.querySelector('.tab-btn[data-tab="flights"]');
+      if (flightsBtn) flightsBtn.click();
+    }, 800);
   }
 
   send.addEventListener('click', doSearch);
@@ -2148,4 +2165,19 @@ document.addEventListener('DOMContentLoaded', () => {
   initAiChips();
   initFromTo();
   initBottomSearch();
+
+  // Entrance animation — bottom search bar slides up from below
+  const bs = document.getElementById('bottomSearch');
+  if (bs) {
+    bs.style.transition = 'none';
+    bs.style.transform  = 'translateY(100%)';
+    bs.style.opacity    = '0';
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        bs.style.transition = 'transform 0.45s cubic-bezier(0.22,1,0.36,1), opacity 0.3s ease';
+        bs.style.transform  = 'translateY(0)';
+        bs.style.opacity    = '1';
+      });
+    });
+  }
 });
