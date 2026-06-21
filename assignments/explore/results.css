@@ -772,14 +772,17 @@ button {
   padding: 2px 0;
 }
 .fl-ai-note {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
   font-size: 11px;
   font-weight: 600;
-  color: var(--purple);
-  background: linear-gradient(90deg, #f5f0ff, #fff5f2);
-  border-radius: 6px;
-  padding: 5px 10px;
+  color: #1a1a1a;
+  background: #fff;
+  border: 1.5px solid #e0e0e0;
+  border-radius: 20px;
+  padding: 4px 11px 4px 7px;
   margin-bottom: 12px;
-  display: inline-block;
 }
 
 /* Flight card (updated with date) */
@@ -957,20 +960,22 @@ button {
 .fl-badge {
   font-size: 9.5px;
   font-weight: 700;
-  color: var(--purple);
-  background: #f5f0ff;
-  border-radius: 4px;
-  padding: 2px 6px;
+  color: #1a1a1a;
+  background: #fff;
+  border: 1.5px solid #e0e0e0;
+  border-radius: 20px;
+  padding: 2px 8px;
   white-space: nowrap;
   margin-top: 3px;
   display: inline-block;
 }
 .fl-stopover-tip {
   font-size: 10px;
-  color: #0ea5e9;
-  background: #f0f9ff;
-  border-radius: 4px;
-  padding: 2px 6px;
+  color: #1a1a1a;
+  background: #fff;
+  border: 1.5px solid #e0e0e0;
+  border-radius: 20px;
+  padding: 2px 8px;
   margin-top: 3px;
   display: inline-block;
 }
@@ -1030,18 +1035,22 @@ button {
   color: var(--muted);
 }
 .fl-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
   font-size: 10px;
-  background: #ecfdf5;
-  color: #15803d;
-  border-radius: 4px;
-  padding: 2px 7px;
   font-weight: 700;
+  color: #1a1a1a;
+  background: #fff;
+  border: 1.5px solid #e0e0e0;
+  border-radius: 20px;
+  padding: 3px 9px 3px 6px;
   margin-top: 4px;
-  display: inline-block;
 }
 .fl-tag.ai {
-  background: linear-gradient(90deg, #f5f0ff, #fff5f2);
-  color: var(--purple);
+  background: #fff;
+  color: #1a1a1a;
+  border: 1.5px solid #e0e0e0;
 }
 .book-btn {
   display: inline-flex;
@@ -1139,16 +1148,7 @@ button {
   cursor: pointer;
   flex-shrink: 0;
 }
-.ht-ai-note {
-  font-size: 10.5px;
-  font-weight: 600;
-  color: var(--purple);
-  background: linear-gradient(90deg, #f5f0ff, #fff5f2);
-  border-radius: 5px;
-  padding: 4px 9px;
-  margin-bottom: 8px;
-  display: inline-block;
-}
+.ht-ai-note { display: none; }
 
 /* ── SPLIT LAYOUT ─────────────────────────── */
 .split-wrap {
@@ -1236,27 +1236,22 @@ button {
 .prop-card:hover .prop-img {
   transform: scale(1.04);
 }
-.prop-ai-tag {
-  position: absolute;
-  top: 10px;
-  left: 10px;
-  padding: 4px 9px;
-  border-radius: 7px;
-  font-size: 10.5px;
-  font-weight: 700;
-  background: linear-gradient(90deg, #7c3aed, var(--brand));
-  color: #fff;
-}
+.prop-ai-tag,
 .prop-deal-tag {
   position: absolute;
   top: 10px;
   left: 10px;
-  padding: 4px 9px;
-  border-radius: 7px;
+  padding: 5px 11px 5px 8px;
+  border-radius: 20px;
   font-size: 10.5px;
   font-weight: 700;
-  background: var(--green);
-  color: #fff;
+  background: rgba(255,255,255,0.95);
+  color: #1a1a1a;
+  box-shadow: 0 1px 6px rgba(0,0,0,0.15);
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  backdrop-filter: blur(4px);
 }
 /* Heart icon on hotel cards (decorative) */
 /* Bookmark button — shared style for hotel + event cards */
@@ -1587,24 +1582,26 @@ button {
   position: absolute;
   top: 10px;
   left: 10px;
-  padding: 4px 10px;
-  border-radius: 8px;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 11px 5px 8px;
+  border-radius: 20px;
   font-size: 10.5px;
   font-weight: 700;
   line-height: 1;
+  background: rgba(255,255,255,0.95);
+  color: #1a1a1a;
+  box-shadow: 0 1px 6px rgba(0,0,0,0.15);
+  backdrop-filter: blur(4px);
 }
-.ec-tag--ai {
-  background: linear-gradient(90deg, #7c3aed, var(--brand));
-  color: #fff;
-}
-.ec-tag--deal {
-  background: var(--green);
-  color: #fff;
-}
+.ec-tag--ai   { background: rgba(255,255,255,0.95); color: #1a1a1a; }
+.ec-tag--deal { background: rgba(255,255,255,0.95); color: #1a1a1a; }
 .ec-tag--anchor {
-  background: rgba(0, 0, 0, 0.72);
+  background: rgba(0,0,0,0.75);
   backdrop-filter: blur(6px);
   color: #fff;
+  box-shadow: none;
 }
 
 /* Heart button */

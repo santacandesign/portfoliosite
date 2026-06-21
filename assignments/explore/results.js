@@ -795,9 +795,13 @@ function selectPriceDay(el) {
 }
 
 /* ── FLIGHT CARDS ──────────────────────────────────────────────── */
+const FL_ICON_AI   = `<svg width="11" height="11" viewBox="0 0 10 10" fill="#1a1a1a"><path d="M5 0l.9 3.6L10 5l-4.1 1.4L5 10l-.9-3.6L0 5l4.1-1.4z"/></svg>`;
+const FL_ICON_DEAL = `<svg width="11" height="11" viewBox="0 0 10 10" fill="#1a1a1a"><path d="M1 1.5h3.5l4 4-3.5 3.5-4-4V1.5z"/><circle cx="2.8" cy="3.2" r=".7"/></svg>`;
+
 function renderFlightCard(f) {
-  const tagHtml = f.tag === 'ai'   ? `<div class="fl-tag ai">${f.tagText}</div>` :
-                  f.tag === 'deal' ? `<div class="fl-tag">${f.tagText}</div>` : '';
+  const cleanText = f.tagText ? f.tagText.replace(/^✦\s*/, '') : '';
+  const tagHtml = f.tag === 'ai'   ? `<div class="fl-tag ai">${FL_ICON_AI}${cleanText}</div>` :
+                  f.tag === 'deal' ? `<div class="fl-tag">${FL_ICON_DEAL}${cleanText}</div>` : '';
   const badgeHtml  = f.badge       ? `<div class="fl-badge">${f.badge}</div>` : '';
   const stopHtml   = f.stopoverTip ? `<div class="fl-stopover-tip">${f.stopoverTip}</div>` : '';
   return `
@@ -846,7 +850,7 @@ function renderFlights() {
           </div>
           <button class="fl-see-all">See all →</button>
         </div>
-        <div class="fl-ai-note">${cat.aiNote}</div>
+        <div class="fl-ai-note">${FL_ICON_AI}${cat.aiNote.replace(/^✦\s*/, '')}</div>
         ${cat.flights.map(f => renderFlightCard(f)).join('')}
       </div>`
     ).join('') + `</div>`;
@@ -926,9 +930,12 @@ function renderHotelCard(h) {
   const discount = Math.round((1 - priceNum / origNum) * 100);
   const orig     = '₹' + origNum.toLocaleString('en-IN');
 
+  const HT_ICON_AI   = `<svg width="11" height="11" viewBox="0 0 10 10" fill="#1a1a1a"><path d="M5 0l.9 3.6L10 5l-4.1 1.4L5 10l-.9-3.6L0 5l4.1-1.4z"/></svg>`;
+  const HT_ICON_DEAL = `<svg width="11" height="11" viewBox="0 0 10 10" fill="none" stroke="#1a1a1a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M1 1.5h3.5l4 4-3.5 3.5-4-4V1.5z"/><circle cx="2.8" cy="3.2" r=".6" fill="#1a1a1a" stroke="none"/></svg>`;
+  const cleanHTagText = h.tagText ? h.tagText.replace(/^✦\s*/, '') : '';
   const tagHtml =
-    h.tag === 'ai'   ? `<div class="prop-ai-tag">${h.tagText}</div>` :
-    h.tag === 'deal' ? `<div class="prop-deal-tag">${h.tagText}</div>` : '';
+    h.tag === 'ai'   ? `<div class="prop-ai-tag">${HT_ICON_AI}${cleanHTagText}</div>` :
+    h.tag === 'deal' ? `<div class="prop-deal-tag">${HT_ICON_DEAL}${cleanHTagText}</div>` : '';
 
   return `
     <div class="prop-card" id="hc-${h.id}"
@@ -1050,11 +1057,16 @@ function initHotelsLoader() {
 }
 
 /* ── EVENT CARDS (Airbnb category sections) ────────────────────── */
+const EC_ICON_AI     = `<svg width="11" height="11" viewBox="0 0 10 10" fill="#1a1a1a"><path d="M5 0l.9 3.6L10 5l-4.1 1.4L5 10l-.9-3.6L0 5l4.1-1.4z"/></svg>`;
+const EC_ICON_DEAL   = `<svg width="11" height="11" viewBox="0 0 10 10" fill="#1a1a1a"><path d="M1 1.5h3.5l4 4-3.5 3.5-4-4V1.5z"/><circle cx="2.8" cy="3.2" r=".6"/></svg>`;
+const EC_ICON_ANCHOR = `<svg width="11" height="11" viewBox="0 0 10 10" fill="#fff"><path d="M5 0l.9 3.6L10 5l-4.1 1.4L5 10l-.9-3.6L0 5l4.1-1.4z"/></svg>`;
+
 function renderEventCard(e) {
+  const cleanEvText = e.tagText ? e.tagText.replace(/^✦\s*/, '') : '';
   const tagHtml =
-    e.tag === 'ai'     ? `<div class="ec-tag ec-tag--ai">${e.tagText}</div>` :
-    e.tag === 'deal'   ? `<div class="ec-tag ec-tag--deal">${e.tagText}</div>` :
-    e.tag === 'anchor' ? `<div class="ec-tag ec-tag--anchor">${e.tagText}</div>` : '';
+    e.tag === 'ai'     ? `<div class="ec-tag ec-tag--ai">${EC_ICON_AI}${cleanEvText}</div>` :
+    e.tag === 'deal'   ? `<div class="ec-tag ec-tag--deal">${EC_ICON_DEAL}${cleanEvText}</div>` :
+    e.tag === 'anchor' ? `<div class="ec-tag ec-tag--anchor">${EC_ICON_ANCHOR}${cleanEvText}</div>` : '';
 
   const isFree = e.price === 'Free';
   return `
