@@ -749,7 +749,7 @@ button {
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  margin-bottom: 12px;
+  margin-bottom: 4px;
   gap: 12px;
 }
 .fl-section-title {
@@ -759,8 +759,7 @@ button {
   margin-bottom: 2px;
 }
 .fl-section-sub {
-  font-size: 14px;
-  color: var(--muted);
+  display: none;
 }
 .fl-see-all {
   font-size: 14px;
@@ -779,7 +778,7 @@ button {
   background: linear-gradient(90deg, #f5f0ff, #fff5f2);
   border-radius: 6px;
   padding: 5px 10px;
-  margin-bottom: 10px;
+  margin-bottom: 12px;
   display: inline-block;
 }
 
@@ -1045,6 +1044,9 @@ button {
   color: var(--purple);
 }
 .book-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
   padding: 10px 20px;
   border-radius: 10px;
   border: none;
@@ -1164,8 +1166,7 @@ button {
 }
 .split-right {
   flex: 1;
-  padding: 16px;
-  padding-bottom: 36px;
+  padding: 14px;
   background: var(--white);
   overflow: hidden;
   display: flex;
@@ -1173,11 +1174,11 @@ button {
 }
 .real-map {
   flex: 1;
-  border-radius: 20px;
+  border-radius: 18px;
   overflow: hidden;
   min-height: 0;
   box-shadow:
-    0 4px 24px rgba(0, 0, 0, 0.12),
+    0 2px 16px rgba(0, 0, 0, 0.1),
     0 0 0 1px rgba(0, 0, 0, 0.04);
 }
 
@@ -1229,6 +1230,7 @@ button {
   height: 100%;
   object-fit: cover;
   display: block;
+  border-radius: 16px;
   transition: transform 0.3s;
 }
 .prop-card:hover .prop-img {
@@ -1573,6 +1575,7 @@ button {
   height: 100%;
   object-fit: cover;
   display: block;
+  border-radius: 16px;
   transition: transform 0.35s ease;
 }
 .ec-card:hover .ec-img {
@@ -1799,7 +1802,32 @@ button {
   color: white !important;
 }
 
-/* .map-marker-concert retired — venue now uses .map-marker-event-pin */
+.map-marker-concert {
+  position: relative;
+  background: #1a1a2e;
+  color: white;
+  border-radius: 8px;
+  padding: 5px 10px;
+  font-size: 11px;
+  font-weight: 700;
+  white-space: nowrap;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.25);
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  letter-spacing: 0.01em;
+  width: fit-content;
+}
+.map-marker-concert::after {
+  content: "";
+  position: absolute;
+  bottom: -6px;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 6px solid transparent;
+  border-top-color: #1a1a2e;
+  border-bottom: none;
+}
 
 .map-marker-airport {
   background: #1a1a2e;
@@ -1815,6 +1843,13 @@ button {
 
 /* ── PLAN / KANBAN ────────────────────────── */
 .plan-wrap {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  min-height: 0;
+}
+.plan-content-row {
   flex: 1;
   display: flex;
   overflow: hidden;
@@ -2033,6 +2068,7 @@ button {
   padding: 14px 0;
   border-bottom: 1px solid var(--line);
   gap: 16px;
+  cursor: pointer;
 }
 .kb-row:last-child {
   border-bottom: none;
@@ -2287,6 +2323,26 @@ button {
   max-width: 260px;
 }
 
+/* Post-booking header */
+.plan-booked-header {
+  padding: 18px 24px 14px;
+  border-bottom: 1px solid var(--line);
+  background: var(--white);
+  flex-shrink: 0;
+}
+.plan-booked-title {
+  font-size: 26px;
+  font-weight: 800;
+  color: var(--ink);
+  letter-spacing: -0.5px;
+  line-height: 1.15;
+}
+.plan-booked-sub {
+  font-size: 13px;
+  color: var(--muted);
+  margin-top: 3px;
+}
+
 /* Day colours */
 .d1 {
   background: #eef2ff;
@@ -2323,29 +2379,55 @@ button {
 /* ── REVIEW BAR ──────────────────────────── */
 .review-bar {
   display: none;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-  padding: 8px 12px 8px;
-  border-bottom: 1.5px solid var(--line);
+  flex-direction: column;
+  background: #1a1a1a;
+  border-radius: 14px;
+  overflow: hidden;
+  margin-bottom: 6px;
 }
 .review-bar.visible {
   display: flex;
 }
+.review-bar-progress-track {
+  width: 100%;
+  height: 3px;
+  background: rgba(255, 255, 255, 0.15);
+}
+.review-bar-progress-fill {
+  height: 100%;
+  width: 0%;
+  background: rgba(255, 255, 255, 0.5);
+  border-radius: 0 2px 2px 0;
+  transition:
+    width 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+    background 0.4s;
+}
+.review-bar.all-done .review-bar-progress-fill {
+  background: var(--green);
+}
+.review-bar.review-bar--plan-hidden {
+  display: none !important;
+}
+.review-bar-body {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 10px 12px;
+}
 @keyframes reviewPulse {
   0% {
-    background: transparent;
+    background: #1a1a1a;
   }
   30% {
-    background: rgba(244, 99, 46, 0.08);
+    background: #2a2a2a;
   }
   100% {
-    background: transparent;
+    background: #1a1a1a;
   }
 }
 .review-bar--pulse {
   animation: reviewPulse 0.5s ease;
-  border-radius: 10px;
 }
 .review-bar-status {
   display: flex;
@@ -2354,16 +2436,16 @@ button {
   flex-wrap: wrap;
   font-size: 12.5px;
   font-weight: 600;
-  color: var(--ink);
+  color: rgba(255, 255, 255, 0.5);
 }
 .rbs-item {
   display: flex;
   align-items: center;
   gap: 5px;
-  color: var(--muted);
+  color: rgba(255, 255, 255, 0.4);
 }
 .rbs-item.done {
-  color: var(--ink);
+  color: #fff;
 }
 .rbs-tick {
   display: inline-flex;
@@ -2372,16 +2454,19 @@ button {
   width: 16px;
   height: 16px;
   border-radius: 50%;
-  background: var(--ink);
+  background: rgba(255, 255, 255, 0.2);
   flex-shrink: 0;
+}
+.rbs-item.done .rbs-tick {
+  background: var(--green);
 }
 .rbs-tick svg {
   display: block;
 }
 .review-bar-btn {
   flex-shrink: 0;
-  background: var(--ink);
-  color: #fff;
+  background: #fff;
+  color: #1a1a1a;
   border: none;
   font-family: inherit;
   font-size: 13px;
@@ -2393,7 +2478,7 @@ button {
   white-space: nowrap;
 }
 .review-bar-btn:hover {
-  background: #2a2a2a;
+  background: #f0f0f0;
 }
 
 /* ── BOTTOM FREEFORM SEARCH ──────────────── */
@@ -2493,8 +2578,8 @@ button {
   align-items: center;
   gap: 6px;
   padding: 8px 16px;
-  background: #EDE9FE;
-  color: #7C3AED;
+  background: #ede9fe;
+  color: #7c3aed;
   border: none;
   border-radius: 99px;
   font-family: inherit;
@@ -2974,9 +3059,220 @@ button {
   transform: translateY(0);
 }
 
-/* push plan content below the booking bar */
-#panel-plan.active {
+/* push plan content below the booking bar (removed when booked) */
+#panel-plan.active:not(.trip-booked) {
   padding-top: 68px;
+}
+#panel-plan.active.trip-booked {
+  padding-top: 0;
+}
+
+/* ── PLAN TAB CHECKLIST LOADER ───────────────── */
+.plan-loader-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 200;
+  background: var(--bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.plan-loader-inner {
+  text-align: left;
+  max-width: 340px;
+  width: 100%;
+  padding: 0 24px;
+}
+.plan-loader-checklist {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+/* ── LOCKED KANBAN CARDS ─────────────────────── */
+.kb-card--locked {
+  cursor: default;
+  background: #fafafa;
+  border-color: var(--line);
+}
+.kb-card--locked:hover {
+  transform: none;
+  box-shadow: var(--sh);
+}
+.kb-card-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+}
+.kb-lock-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--line);
+  color: var(--muted);
+  flex-shrink: 0;
+}
+.kb-receipt-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 7px;
+  border: 1.5px solid var(--line);
+  background: var(--white);
+  color: var(--ink2);
+  cursor: pointer;
+  transition:
+    background 0.12s,
+    border-color 0.12s,
+    color 0.12s;
+}
+.kb-receipt-btn:hover {
+  background: var(--ink);
+  border-color: var(--ink);
+  color: #fff;
+}
+
+/* ── RECEIPT MODAL ───────────────────────────── */
+.receipt-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background: rgba(0, 0, 0, 0);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.25s ease;
+}
+.receipt-modal-backdrop.open {
+  background: rgba(0, 0, 0, 0.45);
+}
+.receipt-modal {
+  background: var(--white);
+  border-radius: 18px;
+  width: 340px;
+  max-width: 92vw;
+  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.22);
+  transform: translateY(16px);
+  opacity: 0;
+  transition:
+    transform 0.28s cubic-bezier(0.34, 1.56, 0.64, 1),
+    opacity 0.22s ease;
+  overflow: hidden;
+}
+.receipt-modal-backdrop.open .receipt-modal {
+  transform: translateY(0);
+  opacity: 1;
+}
+.receipt-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px 12px;
+  border-bottom: 1px solid var(--line);
+}
+.receipt-modal-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--ink);
+}
+.receipt-modal-close {
+  background: none;
+  border: none;
+  font-size: 14px;
+  color: var(--muted);
+  cursor: pointer;
+  padding: 2px 6px;
+  border-radius: 6px;
+}
+.receipt-modal-close:hover {
+  background: var(--line);
+}
+.receipt-receipt {
+  padding: 20px;
+  font-family: "Courier New", monospace;
+  font-size: 12px;
+  background: #f9f9f9;
+}
+.receipt-logo {
+  font-family: inherit;
+  font-size: 18px;
+  font-weight: 900;
+  color: var(--brand);
+  letter-spacing: -0.5px;
+  margin-bottom: 10px;
+}
+.receipt-vendor {
+  font-size: 13px;
+  font-weight: 700;
+  font-family: "Inter", sans-serif;
+  color: var(--ink);
+  margin-bottom: 2px;
+}
+.receipt-ref {
+  color: var(--muted);
+  margin-bottom: 2px;
+}
+.receipt-date {
+  color: var(--muted);
+  margin-bottom: 10px;
+}
+.receipt-divider {
+  border-top: 1px dashed #ccc;
+  margin: 10px 0;
+}
+.receipt-items {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+.receipt-item {
+  display: flex;
+  justify-content: space-between;
+  color: var(--ink2);
+}
+.receipt-total-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+  font-weight: 700;
+  font-family: "Inter", sans-serif;
+  color: var(--ink);
+}
+.receipt-total-amt {
+  color: var(--brand);
+}
+.receipt-status {
+  margin-top: 8px;
+  font-size: 11px;
+  color: var(--green);
+  font-family: "Inter", sans-serif;
+  font-weight: 600;
+}
+.receipt-modal-actions {
+  padding: 14px 20px;
+  border-top: 1px solid var(--line);
+}
+.receipt-download-btn {
+  width: 100%;
+  padding: 10px;
+  border-radius: 10px;
+  border: none;
+  background: var(--ink);
+  color: #fff;
+  font-family: "Inter", sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.receipt-download-btn:hover {
+  background: #2a2a2a;
 }
 
 /* ── BOOKING CONFIRMATION (in-plan overlay) ── */
@@ -3091,4 +3387,389 @@ button {
 }
 ::-webkit-scrollbar-thumb:hover {
   background: #aaa;
+}
+
+/* ── TRIP CONTEXT (header right) ─────────── */
+.trip-context {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: #f5f5f5;
+  border-radius: 20px;
+  padding: 6px 12px;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background 0.15s;
+}
+.trip-context:hover {
+  background: #ebebeb;
+}
+.tc-item {
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--ink);
+  white-space: nowrap;
+}
+.tc-sep {
+  display: inline-block;
+  width: 1px;
+  height: 12px;
+  background: #d0d0d0;
+  border-radius: 1px;
+  flex-shrink: 0;
+}
+.trip-context svg {
+  color: var(--muted);
+  flex-shrink: 0;
+}
+
+/* ── DYNAMIC TAB CHECKS ─────────────────── */
+.tab-check {
+  display: none; /* hidden until done */
+  align-items: center;
+  justify-content: center;
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  margin-left: 4px;
+  flex-shrink: 0;
+}
+.tab-check svg {
+  width: 8px;
+  height: 8px;
+  stroke: #fff;
+  stroke-width: 2.5;
+  fill: none;
+}
+.tab-check.done {
+  display: inline-flex;
+  background: var(--green);
+}
+
+/* ── MAP SEARCH OVERLAY ─────────────────── */
+.map-wrap {
+  position: relative;
+  flex: 1;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+.map-search-overlay {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  padding: 6px 12px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+  pointer-events: all;
+}
+.map-search-overlay svg {
+  color: var(--muted);
+  flex-shrink: 0;
+}
+.map-search-input {
+  border: none;
+  outline: none;
+  font-family: inherit;
+  font-size: 13px;
+  color: var(--ink);
+  width: 140px;
+  background: transparent;
+}
+.map-search-input::placeholder {
+  color: var(--muted);
+}
+
+/* ── PAGE BODY (content + AI side panel) ─── */
+.page-body {
+  flex: 1;
+  display: flex;
+  overflow: hidden;
+  min-height: 0;
+  position: relative;
+}
+.page-body > .content {
+  flex: 1;
+  min-width: 0;
+  transition: flex 0.32s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ── AI SIDE PANEL ───────────────────────── */
+.ai-side-panel {
+  width: 0;
+  flex-shrink: 0;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+  border-left: 1px solid var(--line);
+  transition: width 0.32s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.ai-side-panel.open {
+  width: 340px;
+}
+
+.ai-side-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 16px 12px;
+  border-bottom: 1px solid var(--line);
+  flex-shrink: 0;
+}
+.ai-side-header-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.ai-compass-icon {
+  color: var(--brand);
+  flex-shrink: 0;
+}
+.ai-side-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--ink);
+  letter-spacing: -0.01em;
+}
+.ai-side-close {
+  width: 28px;
+  height: 28px;
+  border: none;
+  background: #f5f5f5;
+  border-radius: 8px;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  color: var(--muted);
+  transition:
+    background 0.15s,
+    color 0.15s;
+  flex-shrink: 0;
+}
+.ai-side-close:hover {
+  background: var(--line);
+  color: var(--ink);
+}
+
+.ai-messages {
+  flex: 1;
+  overflow-y: auto;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-height: 0;
+}
+.ai-msg {
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+}
+.ai-msg--user {
+  flex-direction: row-reverse;
+}
+.ai-msg-bubble {
+  max-width: 82%;
+  padding: 8px 12px;
+  border-radius: 14px;
+  font-size: 13px;
+  line-height: 1.5;
+}
+.ai-msg--user .ai-msg-bubble {
+  background: var(--ink);
+  color: #fff;
+  border-radius: 14px 14px 4px 14px;
+}
+.ai-msg--ai .ai-msg-bubble {
+  background: #f5f5f5;
+  color: var(--ink);
+  border-radius: 14px 14px 14px 4px;
+}
+.ai-msg-avatar {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  font-size: 11px;
+  font-weight: 700;
+}
+.ai-msg--ai .ai-msg-avatar {
+  background: linear-gradient(135deg, var(--brand), #ff9f4d);
+  color: #fff;
+}
+.ai-msg--user .ai-msg-avatar {
+  background: #e0e0e0;
+  color: var(--ink);
+}
+
+.ai-input-row {
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+  padding: 10px 12px 14px;
+  border-top: 1px solid var(--line);
+  background: #fff;
+  flex-shrink: 0;
+}
+.ai-input {
+  flex: 1;
+  border: 1.5px solid var(--line);
+  border-radius: 10px;
+  padding: 8px 12px;
+  font-family: inherit;
+  font-size: 13px;
+  color: var(--ink);
+  resize: none;
+  outline: none;
+  max-height: 80px;
+  overflow-y: auto;
+  line-height: 1.5;
+  transition: border-color 0.15s;
+}
+.ai-input:focus {
+  border-color: var(--ink);
+}
+.ai-input::placeholder {
+  color: var(--muted);
+}
+.ai-send-btn {
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  background: var(--ink);
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  transition: background 0.15s;
+}
+.ai-send-btn:hover {
+  background: #333;
+}
+
+/* AI typing dots */
+.ai-typing {
+  display: flex;
+  gap: 4px;
+  padding: 9px 12px;
+  background: #f5f5f5;
+  border-radius: 14px 14px 14px 4px;
+  align-self: flex-start;
+}
+.ai-typing span {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--muted);
+  animation: aiTypingDot 1.2s infinite;
+}
+.ai-typing span:nth-child(2) {
+  animation-delay: 0.2s;
+}
+.ai-typing span:nth-child(3) {
+  animation-delay: 0.4s;
+}
+@keyframes aiTypingDot {
+  0%,
+  60%,
+  100% {
+    transform: translateY(0);
+    opacity: 0.4;
+  }
+  30% {
+    transform: translateY(-4px);
+    opacity: 1;
+  }
+}
+
+/* ── FLOATING AI TRIGGER BUTTON ────────── */
+.ai-float-btn {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 300;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: #1a1a1a;
+  border: none;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  box-shadow:
+    0 4px 16px rgba(0, 0, 0, 0.22),
+    0 0 0 1px rgba(255, 255, 255, 0.06) inset;
+  transition:
+    transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1),
+    box-shadow 0.2s,
+    opacity 0.2s ease;
+  color: #fff;
+  opacity: 1;
+}
+.ai-float-btn:hover {
+  transform: scale(1.1);
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.32);
+}
+.ai-float-btn.panel-open {
+  opacity: 0 !important;
+  pointer-events: none;
+  transform: scale(0.7);
+}
+
+/* ── AI side panel content fades in AFTER width transition ── */
+.ai-side-header,
+.ai-side-panel .ai-messages,
+.ai-side-panel .ai-input-row {
+  opacity: 0;
+  transition: opacity 0s ease;
+}
+.ai-side-panel.open .ai-side-header,
+.ai-side-panel.open .ai-messages,
+.ai-side-panel.open .ai-input-row {
+  opacity: 1;
+  transition: opacity 0.18s ease 0.3s;
+}
+
+/* ── Plan map day hover popup ── */
+.maplibregl-popup.plan-day-popup-wrap .maplibregl-popup-content {
+  background: #1a1a1a;
+  color: #fff;
+  border-radius: 10px;
+  padding: 7px 13px;
+  font-family: "Inter", sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  pointer-events: none;
+  white-space: nowrap;
+}
+.maplibregl-popup.plan-day-popup-wrap .maplibregl-popup-tip {
+  border-top-color: #1a1a1a;
+}
+.maplibregl-popup.plan-day-popup-wrap .maplibregl-popup-close-button {
+  display: none;
+}
+.ai-float-compass {
+  color: #fff;
+}
+.ai-float-sparkle {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  color: #ffd700;
+  pointer-events: none;
+  width: 14px;
+  height: 14px;
 }

@@ -18,7 +18,7 @@ const DESTINATIONS = [
   { id: 'newYork',   city: 'New York',    country: 'USA',         emoji: '🗽', tag: 'City break'  },
 ];
 
-const EXAMPLE_PROMPT = "I'm going to the Hatsune Miku concert on August 28th, help me plan a 2 week trip around this";
+const EXAMPLE_PROMPT = "I'm going to the Hatsune Miku concert on August 28th, help me plan a 2 week trip around this for me and my partner";
 
 const HISTORY = [
   { text: "I'm going to the Hatsune Miku concert on August 28th, help me plan a 2 week trip around this", time: "Just now" },

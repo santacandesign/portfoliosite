@@ -432,8 +432,10 @@ const DAYS = [
   { label:'Day 13', date:'Sep 7',  dow:'Sun', cls:'d13' },
   { label:'Day 14', date:'Sep 8',  dow:'Mon', cls:'d14' },
 ];
-let planItems  = [];
-let addedIds   = new Set();
+let planItems     = [];
+let addedIds      = new Set();
+let planLoaderShown = false;
+let tripBooked    = false;
 
 /* ── PLAN ICON SVGs ─────────────────────────────────────────────── */
 const PLAN_ICONS = {
@@ -517,7 +519,7 @@ let planMarkers   = [];
 const eventMarkerEls  = {};        // eventId → DOM element (for progressive reveal)
 const revealedEvents  = new Set(); // eventIds that have been time-revealed
 
-const DAY_COLORS = ['#3B55D9','#C94020','#15803D','#6D28D9','#92600A'];
+const DAY_COLORS = ['#F4632E','#3B82F6','#10B981','#8B5CF6','#F59E0B','#EC4899','#06B6D4','#EF4444','#14B8A6','#A855F7'];
 
 const MAKUHARI_MESSE_COORDS = [140.0290, 35.6480];
 
@@ -647,6 +649,14 @@ function addHotelMarkers() {
     .setLngLat(AIRPORT_COORDS).addTo(hotelMap);
   bounds.extend(AIRPORT_COORDS);
 
+  // Hatsune Miku concert venue
+  const concertHtEl = document.createElement('div');
+  concertHtEl.className = 'map-marker-concert';
+  concertHtEl.innerHTML = `<svg width="11" height="11" viewBox="0 0 20 20" fill="currentColor"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 0 0 .95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 0 0-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 0 0-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 0 0-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 0 0 .951-.69l1.07-3.292z"/></svg> Hatsune Miku concert here`;
+  new maplibregl.Marker({ element: concertHtEl, anchor:'bottom' })
+    .setLngLat(MAKUHARI_MESSE_COORDS).addTo(hotelMap);
+  bounds.extend(MAKUHARI_MESSE_COORDS);
+
   // Added event markers on the hotel map
   addedIds.forEach(id => {
     for (const cat of EVENT_CATEGORIES) {
@@ -730,15 +740,11 @@ function addEventMarkers() {
     });
   });
 
-  // Concert venue pin — same style as other event pins (purple dot + label)
+  // Concert venue pin — airport-style pill with star icon
   const concertEl = document.createElement('div');
-  concertEl.className = 'map-marker-event-pin';
-  concertEl.innerHTML = `
-    <div class="empin-dot" style="background:#8B5CF6">
-      <svg viewBox="0 0 24 24"><path d="M12 3v10.55A4 4 0 1 0 14 17V7h4V3h-6z"/></svg>
-    </div>
-    <div class="empin-label">Makuhari Messe</div>`;
-  new maplibregl.Marker({ element: concertEl, anchor: 'left' })
+  concertEl.className = 'map-marker-concert';
+  concertEl.innerHTML = `<svg width="11" height="11" viewBox="0 0 20 20" fill="currentColor"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 0 0 .95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 0 0-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 0 0-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 0 0-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 0 0 .951-.69l1.07-3.292z"/></svg> Hatsune Miku concert here`;
+  new maplibregl.Marker({ element: concertEl, anchor: 'bottom' })
     .setLngLat([140.0290, 35.6480])
     .addTo(eventMap);
   bounds.extend([140.0290, 35.6480]);
@@ -821,7 +827,8 @@ function renderFlightCard(f) {
       </div>
       <button class="book-btn" id="btn-${f.id}"
         onclick="addFlightToplan(event,'fc-${f.id}','${f.id}','${f.airline}','${f.date} · ${f.from}→${f.to}','${f.price}')">
-        Book
+        <svg width="13" height="13" viewBox="0 0 20 20" fill="currentColor" style="flex-shrink:0"><path d="M5 4a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v14l-5-3-5 3V4z"/></svg>
+        Add to plan
       </button>
     </div>`;
 }
@@ -1071,7 +1078,7 @@ function renderEventCard(e) {
         </div>
         <div class="ec-price-row">
           <span class="ec-price ${isFree ? 'ec-price--free' : ''}">${e.price}</span>${isFree
-            ? '<span class="ec-price-unit"> · Free entry</span>'
+            ? ''
             : '<span class="ec-price-unit"> / person</span>'}
         </div>
       </div>
@@ -1104,7 +1111,7 @@ function addFlightToplan(evt, cardId, itemId, name, info, price) {
   if (addedIds.has(itemId)) return;
   addedIds.add(itemId);
   const btn = evt.currentTarget;
-  btn.textContent = '✓ Booked'; btn.classList.add('added'); btn.disabled = true;
+  btn.innerHTML = '<svg width="13" height="13" viewBox="0 0 20 20" fill="currentColor" style="flex-shrink:0"><path d="M5 4a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v14l-5-3-5 3V4z"/></svg> Added'; btn.classList.add('added'); btn.disabled = true;
   const cardEl  = document.getElementById(cardId);
   // Target Day 1 column in the horizontal strip
   const day0Col = document.querySelector('#hpsDates [data-day="0"]');
@@ -1171,7 +1178,9 @@ function addEventToplan(evt, itemId, name, location, price) {
   const targetCol = document.querySelector(`#hpsDates [data-day="${targetDay}"]`);
 
   const cardEl = document.getElementById('ec-' + itemId);
-  flyToStrip(cardEl, () => pushToPlan('event', itemId, name, location, price), targetCol);
+  // Fly to events tab button so counter animation draws the eye there
+  const eventsTabBtn = document.getElementById('tabEvents');
+  flyToStrip(cardEl, () => pushToPlan('event', itemId, name, location, price), eventsTabBtn);
 }
 
 function pushToPlan(type, itemId, name, info, price) {
@@ -1223,16 +1232,14 @@ function pushToPlan(type, itemId, name, info, price) {
 }
 
 /* ── FLY TO REVIEW BAR ANIMATION ────────────────────────────────── */
-function flyToStrip(cardEl, onComplete, _targetEl) {
+function flyToStrip(cardEl, onComplete, targetEl) {
   if (!cardEl) { onComplete(); return; }
 
   const cardRect = cardEl.getBoundingClientRect();
 
-  // Target: the review bar (bottom search area)
-  const reviewBar = document.getElementById('reviewBar');
-  const bsearch   = document.getElementById('bottomSearch');
-  const anchor    = reviewBar || bsearch;
+  // If a specific target element is provided, fly to it; else fallback to review bar
   let targetX, targetY;
+  const anchor = targetEl || document.getElementById('reviewBar') || document.getElementById('aiSidePanel');
   if (anchor) {
     const r = anchor.getBoundingClientRect();
     targetX = r.left + r.width  / 2;
@@ -1368,6 +1375,93 @@ function initPlanMap() {
   });
 }
 
+/* ── PLAN MAP DAY HOVER HIGHLIGHT ─────────────────────────────── */
+let planDayLabel = null;
+let planDayLabelTimer = null;
+
+function highlightPlanDay(di) {
+  if (!planMap || !planMapReady) return;
+
+  DAYS.forEach((_, idx) => {
+    if (!planMap.getSource(`plan-day-${idx}`)) return;
+    const dim = idx !== di;
+    try {
+      planMap.setPaintProperty(`plan-glow2-${idx}`,  'line-opacity', dim ? 0.01 : 0.07);
+      planMap.setPaintProperty(`plan-glow-${idx}`,   'line-opacity', dim ? 0.03 : 0.18);
+      planMap.setPaintProperty(`plan-outline-${idx}`,'line-opacity', dim ? 0.1  : 0.9 );
+      planMap.setPaintProperty(`plan-line-${idx}`,   'line-opacity', dim ? 0.1  : 1.0 );
+    } catch(_) {}
+    try { planMap.setPaintProperty(`plan-conn-${idx}`, 'line-opacity', 0.1); } catch(_) {}
+  });
+
+  // Dim / restore marker elements
+  document.querySelectorAll('.plan-map-marker-wrap').forEach(el => {
+    const markerDay = parseInt(el.dataset.day, 10);
+    el.style.opacity     = (isNaN(markerDay) || markerDay === di) ? '1' : '0.15';
+    el.style.transition  = 'opacity 0.2s ease';
+  });
+
+  // Pan map to this day's route + show label popup at centroid
+  const coords = planItems.filter(it => it.day === di).map(it => getItemCoords(it)).filter(Boolean);
+  if (coords.length && planMap) {
+    const lng = coords.reduce((s, c) => s + c[0], 0) / coords.length;
+    const lat = coords.reduce((s, c) => s + c[1], 0) / coords.length;
+    const day = DAYS[di];
+
+    // Fly/fit to day bounds
+    if (coords.length === 1) {
+      planMap.flyTo({ center: coords[0], zoom: 13, duration: 500, essential: true });
+    } else {
+      const bounds = coords.reduce(
+        (b, c) => b.extend(c),
+        new maplibregl.LngLatBounds(coords[0], coords[0])
+      );
+      planMap.fitBounds(bounds, { padding: 90, duration: 500, essential: true });
+    }
+
+    // Label popup — cancel any pending timer, then show after fitBounds animation
+    if (planDayLabelTimer) { clearTimeout(planDayLabelTimer); planDayLabelTimer = null; }
+    if (planDayLabel) { planDayLabel.remove(); planDayLabel = null; }
+    planDayLabelTimer = setTimeout(() => {
+      planDayLabelTimer = null;
+      if (!planMap) return;
+      // Use map's actual center after animation so popup sits on the route
+      const center = planMap.getCenter();
+      planDayLabel = new maplibregl.Popup({
+        closeButton: false,
+        closeOnClick: false,
+        className: 'plan-day-popup-wrap',
+        offset: [0, -8],
+      })
+        .setLngLat([center.lng, center.lat])
+        .setHTML(`<strong>${day.label}</strong> · ${day.date} <span style="opacity:.7">${day.dow}</span>`)
+        .addTo(planMap);
+    }, 520);
+  }
+}
+
+function resetPlanHighlight() {
+  if (!planMap || !planMapReady) return;
+
+  DAYS.forEach((_, idx) => {
+    if (!planMap.getSource(`plan-day-${idx}`)) return;
+    try {
+      planMap.setPaintProperty(`plan-glow2-${idx}`,  'line-opacity', 0.07);
+      planMap.setPaintProperty(`plan-glow-${idx}`,   'line-opacity', 0.18);
+      planMap.setPaintProperty(`plan-outline-${idx}`,'line-opacity', 0.9 );
+      planMap.setPaintProperty(`plan-line-${idx}`,   'line-opacity', 1.0 );
+    } catch(_) {}
+    try { planMap.setPaintProperty(`plan-conn-${idx}`, 'line-opacity', 0.6); } catch(_) {}
+  });
+
+  document.querySelectorAll('.plan-map-marker-wrap').forEach(el => {
+    el.style.opacity = '1';
+  });
+
+  if (planDayLabelTimer) { clearTimeout(planDayLabelTimer); planDayLabelTimer = null; }
+  if (planDayLabel) { planDayLabel.remove(); planDayLabel = null; }
+}
+
 /* Fetch a road-following route from OSRM's free public server.
    coords: array of [lng, lat] waypoints.
    Returns array of [lng, lat] points following actual roads,
@@ -1437,14 +1531,22 @@ async function updatePlanRoutes() {
       type:'Feature', geometry:{ type:'LineString', coordinates: roadCoords }
     }});
 
-    // Glow
+    // Outer glow (wide, very soft)
+    planMap.addLayer({ id:`plan-glow2-${di}`, type:'line', source:srcId,
+      layout:{ 'line-join':'round','line-cap':'round' },
+      paint:{ 'line-color':color, 'line-width':22, 'line-opacity':0.07 } });
+    // Inner glow
     planMap.addLayer({ id:`plan-glow-${di}`, type:'line', source:srcId,
       layout:{ 'line-join':'round','line-cap':'round' },
-      paint:{ 'line-color':color, 'line-width':14, 'line-opacity':0.16 } });
+      paint:{ 'line-color':color, 'line-width':10, 'line-opacity':0.18 } });
+    // White underline (gives crisp edge)
+    planMap.addLayer({ id:`plan-outline-${di}`, type:'line', source:srcId,
+      layout:{ 'line-join':'round','line-cap':'round' },
+      paint:{ 'line-color':'#ffffff', 'line-width':5, 'line-opacity':0.9 } });
     // Main line
     planMap.addLayer({ id:`plan-line-${di}`, type:'line', source:srcId,
       layout:{ 'line-join':'round','line-cap':'round' },
-      paint:{ 'line-color':color, 'line-width':3.5, 'line-opacity':0.92 } });
+      paint:{ 'line-color':color, 'line-width':3, 'line-opacity':1 } });
   }
 
   // ── Between-day connectors (dashed, also road-following) ───────
@@ -1465,8 +1567,7 @@ async function updatePlanRoutes() {
     }});
     planMap.addLayer({ id: layId, type:'line', source: srcId,
       layout:{ 'line-join':'round','line-cap':'round' },
-      paint:{ 'line-color':'#AAAAAA', 'line-width':2, 'line-opacity':0.5,
-        'line-dasharray':[4,5] } });
+      paint:{ 'line-color':'#CBD5E1', 'line-width':1.5, 'line-opacity':0.4 } });
   }
 
   // ── Markers ────────────────────────────────────────────────────
@@ -1486,6 +1587,7 @@ async function updatePlanRoutes() {
 
     const el = document.createElement('div');
     el.className = 'plan-map-marker-wrap';
+    el.dataset.day = String(it.day);
     el.innerHTML = `
       <div class="plan-map-marker" style="background:${bgColor}">${PLAN_ICONS[iconKey] || PLAN_ICONS.event}</div>
       <div class="plan-map-label">${it.name}</div>
@@ -1506,11 +1608,21 @@ async function updatePlanRoutes() {
     .addTo(planMap);
   planMarkers.push(apMarker);
 
+  // Hatsune Miku concert venue
+  const concertPlanEl = document.createElement('div');
+  concertPlanEl.className = 'map-marker-concert';
+  concertPlanEl.innerHTML = `<svg width="11" height="11" viewBox="0 0 20 20" fill="currentColor"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 0 0 .95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 0 0-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 0 0-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 0 0-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 0 0 .951-.69l1.07-3.292z"/></svg> Hatsune Miku concert here`;
+  const concertPlanMarker = new maplibregl.Marker({ element: concertPlanEl, anchor:'bottom' })
+    .setLngLat(MAKUHARI_MESSE_COORDS)
+    .addTo(planMap);
+  planMarkers.push(concertPlanMarker);
+
   // Fit bounds
   if (allCoords.length) {
     const bounds = new maplibregl.LngLatBounds();
     allCoords.forEach(c => bounds.extend(c));
     bounds.extend(AIRPORT_COORDS);
+    bounds.extend(MAKUHARI_MESSE_COORDS);
     planMap.fitBounds(bounds, { padding:80, maxZoom:13, duration:800 });
   }
 }
@@ -1534,10 +1646,26 @@ function renderPlan() {
     return;
   }
 
+  const headerHtml = tripBooked
+    ? `<div class="plan-booked-header">
+         <div class="plan-booked-title">You're all set for Japan 🎌</div>
+         <div class="plan-booked-sub">Here's your plan</div>
+       </div>`
+    : '';
+
   wrap.innerHTML = `
-    <div class="kb-pane" id="kbPane"></div>
-    <div class="plan-map-pane">
-      <div id="plan-map" class="real-map"></div>
+    ${headerHtml}
+    <div class="plan-content-row">
+      <div class="kb-pane" id="kbPane"></div>
+      <div class="plan-map-pane">
+        <div class="map-wrap">
+          <div id="plan-map" class="real-map"></div>
+          <div class="map-search-overlay">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            <input class="map-search-input" placeholder="Search map…" />
+          </div>
+        </div>
+      </div>
     </div>
   `;
   renderKanban();
@@ -1561,20 +1689,34 @@ function renderKanban() {
       else if (it.type === 'hotel')  { iconKey = 'hotel';   iconCls = 'kb-icon--hotel'; }
       else { iconKey = it.isAnchor ? 'concert' : getEventSubtype(it.id); iconCls = 'kb-icon--event'; }
 
-      return `<div class="kb-card" draggable="true" data-id="${it.id}">
+      // Post-booking: flights, hotels, and paid events are locked; free events can move
+      const isFreeEvent = it.type === 'event' && (it.price === 'Free' || !it.price);
+      const locked = tripBooked && !isFreeEvent;
+
+      const lockIcon = `<svg width="10" height="10" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5 8V6a5 5 0 0 1 10 0v2h1a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h1zm2-2a3 3 0 1 1 6 0v2H7V6z" clip-rule="evenodd"/></svg>`;
+      const receiptIcon = `<svg width="13" height="13" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M4 4a2 2 0 0 1 2-2h4.586A2 2 0 0 1 12 2.586L15.414 6A2 2 0 0 1 16 7.414V16a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4zm2 6a1 1 0 0 1 1-1h6a1 1 0 1 1 0 2H7a1 1 0 0 1-1-1zm1 3a1 1 0 1 0 0 2h6a1 1 0 1 0 0-2H7z" clip-rule="evenodd"/></svg>`;
+
+      const actions = locked
+        ? `<div class="kb-card-actions">
+             <span class="kb-lock-badge">${lockIcon}</span>
+             <button class="kb-receipt-btn" onclick="event.stopPropagation();openReceiptModal('${it.id}','${it.name.replace(/'/g,"\\'")}','${it.price||''}','${it.type}')" title="View receipt">${receiptIcon}</button>
+           </div>`
+        : `<button class="kb-card-del" onclick="event.stopPropagation();removeItem('${it.id}')">✕</button>`;
+
+      return `<div class="kb-card${locked ? ' kb-card--locked' : ''}" ${locked ? '' : 'draggable="true"'} data-id="${it.id}">
         <div class="kb-card-icon ${iconCls}">${PLAN_ICONS[iconKey] || PLAN_ICONS.event}</div>
         <div class="kb-card-body">
           <div class="kb-card-name">${it.name}</div>
           <div class="kb-card-info">${it.info || ''}</div>
         </div>
-        <button class="kb-card-del" onclick="event.stopPropagation();removeItem('${it.id}')">✕</button>
+        ${actions}
       </div>`;
     }).join('');
 
     const emptyHint = items.length === 0
       ? `<div class="kb-empty">Drop here</div>` : '';
 
-    return `<div class="kb-row ${day.concert ? 'is-concert' : ''}">
+    return `<div class="kb-row ${day.concert ? 'is-concert' : ''}" data-day="${di}">
       <div class="kb-day-lbl">
         <div class="kb-lbl-label">${day.label}</div>
         <div class="kb-lbl-date">${day.date}</div>
@@ -1587,6 +1729,13 @@ function renderKanban() {
 
   pane.innerHTML = `<div class="kb-body">${rowsHtml}</div>`;
   initKanbanDnd();
+
+  // Attach day-hover highlighting to each row
+  document.querySelectorAll('#kbPane .kb-row[data-day]').forEach(row => {
+    const di = parseInt(row.dataset.day, 10);
+    row.addEventListener('mouseenter', () => highlightPlanDay(di));
+    row.addEventListener('mouseleave', resetPlanHighlight);
+  });
 }
 
 function initKanbanDnd() {
@@ -1735,27 +1884,8 @@ function initFromTo() {
 const TICK_SVG = `<svg width="10" height="10" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
 
 function updateTabBadges() {
-  const hasFlight = planItems.some(it => it.type === 'flight');
-  const hasHotel  = planItems.some(it => it.type === 'hotel');
-  const evtCount  = planItems.filter(it => it.type === 'event').length;
-
-  // Review bar
-  const bar    = document.getElementById('reviewBar');
-  const status = document.getElementById('reviewBarStatus');
-  if (!bar || !status) return;
-
-  if (!planItems.length) { bar.classList.remove('visible'); return; }
-
-  const flightItem = planItems.find(it => it.type === 'flight');
-  const hotelItem  = planItems.find(it => it.type === 'hotel');
-
-  const items = [];
-  if (flightItem) items.push(`<span class="rbs-item done">${flightItem.info.split(' · ').pop()} <span class="rbs-tick">${TICK_SVG}</span></span>`);
-  if (hotelItem)  items.push(`<span class="rbs-item done">Hotel <span class="rbs-tick">${TICK_SVG}</span></span>`);
-  if (evtCount)   items.push(`<span class="rbs-item done">${evtCount} Event${evtCount !== 1 ? 's' : ''} <span class="rbs-tick">${TICK_SVG}</span></span>`);
-
-  status.innerHTML = items.join('<span style="color:var(--line);font-weight:300">|</span>');
-  bar.classList.add('visible');
+  // Keep dynamic tab labels (flight route, hotel count, event count + check) in sync
+  updateTabLabels();
 }
 
 function updateHPlanStrip() {
@@ -1833,6 +1963,68 @@ function updateRailDates() {
 /** Alias called on first load before any items are added */
 function initPlanStripDates() { updateRailDates(); }
 
+/* ── PLAN TAB CHECKLIST LOADER ─────────────────────────────────── */
+function initPlanLoader(onDone) {
+  if (planLoaderShown) { onDone(); return; }
+  planLoaderShown = true;
+
+  const panel = document.getElementById('panel-plan');
+  if (!panel) { onDone(); return; }
+
+  const overlay = document.createElement('div');
+  overlay.className = 'plan-loader-overlay';
+
+  // Build contextual checklist from what's been added
+  const flightItem = planItems.find(it => it.type === 'flight');
+  const hotelItem  = planItems.find(it => it.type === 'hotel');
+  const evtCount   = planItems.filter(it => it.type === 'event').length;
+
+  const items = [];
+  if (flightItem) items.push(`Reviewing your flight · ${flightItem.name} · ${flightItem.info.split(' · ')[0]}`);
+  else            items.push('Checking flight options for your trip');
+  if (hotelItem)  items.push(`Confirming hotel · ${hotelItem.name}`);
+  else            items.push('Noting hotel preferences');
+  if (evtCount)   items.push(`Organising ${evtCount} event${evtCount !== 1 ? 's' : ''} across your 14 days`);
+  else            items.push('Scanning events near your dates');
+  items.push('Building your day-by-day Tokyo planner');
+
+  overlay.innerHTML = `
+    <div class="plan-loader-inner">
+      <div class="fl-loader-icon">✦</div>
+      <div class="fl-loader-title">Setting up your planner</div>
+      <div class="plan-loader-checklist"></div>
+    </div>`;
+
+  panel.style.position = 'relative';
+  panel.appendChild(overlay);
+
+  const cl = overlay.querySelector('.plan-loader-checklist');
+  const els = items.map(text => {
+    const row = document.createElement('div');
+    row.className = 'fl-check-item';
+    row.innerHTML = `
+      <div class="fl-check-circle">
+        <svg viewBox="0 0 12 10"><polyline points="1.5,5 4.5,8.5 10.5,1.5"/></svg>
+      </div>
+      <div class="fl-check-text">${text}</div>`;
+    cl.appendChild(row);
+    return row;
+  });
+
+  const APPEAR = 1100, TICK = 700;
+  els.forEach((el, i) => {
+    setTimeout(() => el.classList.add('visible'), i * APPEAR + 200);
+    setTimeout(() => el.classList.add('checked'), i * APPEAR + 200 + TICK);
+  });
+
+  const dismissAt = (els.length - 1) * APPEAR + 200 + TICK + 400;
+  setTimeout(() => {
+    overlay.style.transition = 'opacity 0.4s ease';
+    overlay.style.opacity = '0';
+    setTimeout(() => { overlay.remove(); onDone(); }, 420);
+  }, dismissAt);
+}
+
 /** Navigate to the plan tab */
 function goToPlanTab() {
   document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
@@ -1845,8 +2037,19 @@ function goToPlanTab() {
   const cta   = document.getElementById('hpsCta');
   if (strip) strip.classList.add('strip-hidden');
   if (cta)   cta.classList.add('cta-hidden');
-  renderPlan();
-  showBookFooter();
+  // Hide review bar on plan tab — keep just the text box
+  document.getElementById('reviewBar')?.classList.remove('visible');
+  // Sync the sliding tab indicator
+  const indicator = document.getElementById('tabIndicator');
+  if (indicator && planBtn) {
+    indicator.style.left  = planBtn.offsetLeft + 'px';
+    indicator.style.width = planBtn.offsetWidth + 'px';
+  }
+  // Show checklist loader first time, then render plan
+  initPlanLoader(() => {
+    renderPlan();
+    if (!tripBooked) showBookFooter();
+  });
 }
 
 /** Rebuild the left-side timeline strip */
@@ -1986,6 +2189,17 @@ function bookEverything() {
           <div class="bco-title">Trip booked!</div>
           <div class="bco-sub">Confirmation &amp; itinerary sent to your email.<br>See you in Tokyo ✨</div>
         `;
+        setTimeout(() => {
+          overlay.style.transition = 'opacity 0.5s ease';
+          overlay.style.opacity = '0';
+          setTimeout(() => {
+            overlay.remove();
+            tripBooked = true;
+            hideBookFooter();
+            document.getElementById('panel-plan')?.classList.add('trip-booked');
+            renderPlan();
+          }, 520);
+        }, 2000);
       }, 400);
       return;
     }
@@ -2061,6 +2275,64 @@ function initEventsLoader() {
   }, 4000);
 }
 
+/* ── RECEIPT MODAL ─────────────────────────────────────────────── */
+const RECEIPT_DATA = {
+  flight: { vendor:'Singapore Airlines', ref:'SQ-BLR-NRT-082026', date:'Booked Jun 21, 2026', items:['Economy · BLR → NRT · Aug 26','Seat 32A selected','Meal: Veg'] },
+  hotel:  { vendor:'Park Hyatt Tokyo', ref:'PH-TYO-0826-0908', date:'Booked Jun 21, 2026', items:['Deluxe Room · 14 nights','Check-in Aug 26 · Check-out Sep 8','Breakfast included'] },
+  event:  { vendor:'Cleartrip Experiences', ref:'CT-EXP-' + Math.random().toString(36).slice(2,8).toUpperCase(), date:'Booked Jun 21, 2026', items:['Instant confirmation','Voucher sent to email','Valid Aug 26 – Sep 8'] },
+};
+
+function openReceiptModal(itemId, itemName, itemPrice, itemType) {
+  const existing = document.getElementById('receiptModal');
+  if (existing) existing.remove();
+
+  const data = RECEIPT_DATA[itemType] || RECEIPT_DATA.event;
+  const refNo = itemType === 'event'
+    ? 'CT-EXP-' + itemId.toUpperCase().slice(0,6)
+    : data.ref;
+
+  const modal = document.createElement('div');
+  modal.id = 'receiptModal';
+  modal.className = 'receipt-modal-backdrop';
+  modal.innerHTML = `
+    <div class="receipt-modal" onclick="event.stopPropagation()">
+      <div class="receipt-modal-header">
+        <div class="receipt-modal-title">Receipt</div>
+        <button class="receipt-modal-close" onclick="closeReceiptModal()">✕</button>
+      </div>
+      <div class="receipt-receipt">
+        <div class="receipt-logo">cleartrip</div>
+        <div class="receipt-vendor">${itemName}</div>
+        <div class="receipt-ref">Booking ref: ${refNo}</div>
+        <div class="receipt-date">${data.date}</div>
+        <div class="receipt-divider"></div>
+        <div class="receipt-items">
+          ${data.items.map(i => `<div class="receipt-item"><span>${i}</span></div>`).join('')}
+        </div>
+        <div class="receipt-divider"></div>
+        <div class="receipt-total-row">
+          <span>Total paid</span>
+          <span class="receipt-total-amt">${itemPrice || '—'}</span>
+        </div>
+        <div class="receipt-status">✓ Payment confirmed</div>
+      </div>
+      <div class="receipt-modal-actions">
+        <button class="receipt-download-btn" onclick="closeReceiptModal()">Download PDF</button>
+      </div>
+    </div>
+  `;
+  modal.onclick = closeReceiptModal;
+  document.body.appendChild(modal);
+  requestAnimationFrame(() => modal.classList.add('open'));
+}
+
+function closeReceiptModal() {
+  const modal = document.getElementById('receiptModal');
+  if (!modal) return;
+  modal.classList.remove('open');
+  setTimeout(() => modal.remove(), 280);
+}
+
 /* ── TABS ──────────────────────────────────────────────────────── */
 function initTabs() {
   function moveTabIndicator(activeBtn) {
@@ -2084,14 +2356,15 @@ function initTabs() {
       const strip = document.getElementById('hplanStrip');
       const cta   = document.getElementById('hpsCta');
       if (btn.dataset.tab === 'plan') {
-        renderPlan();
-        showBookFooter();
         if (strip) strip.classList.add('strip-hidden');
         if (cta)   cta.classList.add('cta-hidden');
+        document.getElementById('reviewBar')?.classList.remove('visible');
+        initPlanLoader(() => { renderPlan(); if (!tripBooked) showBookFooter(); });
       } else {
         hideBookFooter();
         if (strip) strip.classList.remove('strip-hidden');
         if (cta)   cta.classList.remove('cta-hidden');
+        document.getElementById('reviewBar')?.classList.add('visible');
       }
       if (btn.dataset.tab === 'flights') setTimeout(() => initFlightsLoader(), 60);
       if (btn.dataset.tab === 'hotels')  setTimeout(() => initHotelsLoader(), 60);
@@ -2119,71 +2392,154 @@ const BSEARCH_PLACEHOLDERS = {
   plan:    '"Move the hotel to Aug 27" · "Add a free day" · "What\'s missing?"',
 };
 
-const BOOK_FLIGHTS_PROMPT = "I'm done exploring, I think I'm ready to book my flights";
+/* ── AI ASSISTANT PANEL ─────────────────────────────────────────── */
+let aiPanelOpen = false;
 
-function initBottomSearch() {
-  const box      = document.getElementById('bsearchBox');
-  const textarea = document.getElementById('bsearchInput');
-  const send     = document.getElementById('bsearchSend');
-  if (!box || !textarea || !send) return;
+function toggleAiPanel() {
+  aiPanelOpen = !aiPanelOpen;
+  const panel = document.getElementById('aiSidePanel');
+  const btn   = document.getElementById('aiFloatBtn');
+  if (panel) panel.classList.toggle('open', aiPanelOpen);
+  if (btn)   btn.classList.toggle('panel-open', aiPanelOpen);
+}
 
-  // ── Expand / collapse ──────────────────────────────────────────
-  let pinned = false;
+function openAiPanel() {
+  aiPanelOpen = true;
+  const panel = document.getElementById('aiSidePanel');
+  const btn   = document.getElementById('aiFloatBtn');
+  if (panel) panel.classList.add('open');
+  if (btn)   btn.classList.add('panel-open');
+}
 
-  function expandBox() { box.classList.add('expanded'); }
-  function collapseBox() { box.classList.remove('expanded'); pinned = false; }
+function closeAiPanel() {
+  aiPanelOpen = false;
+  const panel = document.getElementById('aiSidePanel');
+  const btn   = document.getElementById('aiFloatBtn');
+  if (panel) panel.classList.remove('open');
+  if (btn)   btn.classList.remove('panel-open');
+}
 
-  // Hover → expand; leave → collapse only if not pinned
-  box.addEventListener('mouseenter', expandBox);
-  box.addEventListener('mouseleave', () => { if (!pinned) collapseBox(); });
-
-  // Any click inside pins it open
-  box.addEventListener('mousedown', () => { pinned = true; expandBox(); });
-
-  // Click outside → collapse + unpin
-  document.addEventListener('mousedown', e => {
-    if (!box.contains(e.target)) collapseBox();
+function addAiMessage(role, text, animate) {
+  const container = document.getElementById('aiMessages');
+  if (!container) return;
+  const isUser = role === 'user';
+  const msgEl  = document.createElement('div');
+  msgEl.className = `ai-msg ai-msg--${isUser ? 'user' : 'ai'}`;
+  msgEl.innerHTML = `
+    <div class="ai-msg-avatar">${isUser ? 'S' : '✦'}</div>
+    <div class="ai-msg-bubble">${text}</div>
+  `;
+  if (animate) msgEl.style.opacity = '0';
+  container.appendChild(msgEl);
+  container.scrollTop = container.scrollHeight;
+  if (animate) requestAnimationFrame(() => {
+    msgEl.style.transition = 'opacity 0.3s ease';
+    msgEl.style.opacity    = '1';
   });
+}
 
-  // ── Auto-grow ──────────────────────────────────────────────────
+function showAiTyping(durationMs) {
+  const container = document.getElementById('aiMessages');
+  if (!container) return;
+  const typing = document.createElement('div');
+  typing.className = 'ai-typing';
+  typing.innerHTML = '<span></span><span></span><span></span>';
+  container.appendChild(typing);
+  container.scrollTop = container.scrollHeight;
+  setTimeout(() => typing.remove(), durationMs);
+}
+
+const AI_OPENING_USER_MSG = "I'm going to the Hatsune Miku concert on August 28th, help me plan a 2 week trip around this for me and my partner";
+const AI_OPENING_AI_MSG   = "Love this plan! 🎤 I found <strong>Hatsune Miku: Magical Mirai</strong> at Makuhari Messe on Aug 28 — perfect anchor for a 2-week Tokyo trip. I've curated events below around the concert: nightlife, day trips, and food experiences. Add anything you like and I'll build the rest of your itinerary.";
+
+function initAiPanel() {
+  const textarea = document.getElementById('aiInput');
+  const sendBtn  = document.getElementById('aiSendBtn');
+  if (!textarea || !sendBtn) return;
+
+  // Auto-grow textarea
   function autoGrow() {
     textarea.style.height = 'auto';
-    textarea.style.height = Math.min(textarea.scrollHeight, 140) + 'px';
+    textarea.style.height = Math.min(textarea.scrollHeight, 80) + 'px';
   }
   textarea.addEventListener('input', autoGrow);
-  autoGrow();
 
-  // Always pre-fill prompt on focus (user can edit after)
+  // Pre-fill on focus to guide user toward booking
   textarea.addEventListener('focus', () => {
-    pinned = true;
-    expandBox();
-    textarea.value = BOOK_FLIGHTS_PROMPT;
-    textarea.setSelectionRange(textarea.value.length, textarea.value.length);
-    autoGrow();
+    if (!textarea.value.trim()) {
+      textarea.value = "I'm done exploring, I want to book flights";
+      textarea.setSelectionRange(textarea.value.length, textarea.value.length);
+      autoGrow();
+    }
   });
 
-  // ── Send ───────────────────────────────────────────────────────
-  function doSearch() {
+  function doSend() {
     const val = textarea.value.trim();
     if (!val) return;
-    send.style.background = 'var(--brand)';
-    send.innerHTML = '✓';
-    textarea.blur();
+    addAiMessage('user', val, true);
+    textarea.value = '';
+    autoGrow();
+
+    // Detect intent to book flights → switch tab
+    if (/flights|book flight|flight now|ready to book|done exploring/i.test(val)) {
+      showAiTyping(800);
+      setTimeout(() => {
+        addAiMessage('ai', "ok, showing you flights ✈️", true);
+        const flightsBtn = document.querySelector('.tab-btn[data-tab="flights"]');
+        if (flightsBtn) flightsBtn.click();
+      }, 1000);
+      return;
+    }
+
+    // Generic fallback reply
+    showAiTyping(1800);
     setTimeout(() => {
-      send.style.background = '';
-      send.innerHTML = `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/></svg>`;
-      textarea.value = '';
-      autoGrow();
-      collapseBox();
-      const flightsBtn = document.querySelector('.tab-btn[data-tab="flights"]');
-      if (flightsBtn) flightsBtn.click();
-    }, 800);
+      addAiMessage('ai', "Got it — I'll factor that into your plan. Anything else you'd like to adjust?", true);
+    }, 2000);
   }
 
-  send.addEventListener('click', doSearch);
+  sendBtn.addEventListener('click', doSend);
   textarea.addEventListener('keydown', e => {
-    if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); doSearch(); }
+    if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); doSend(); }
   });
+
+  // Auto-open after page loader finishes (~4600ms), seed conversation
+  setTimeout(() => {
+    openAiPanel();
+    addAiMessage('user', AI_OPENING_USER_MSG, false);
+    showAiTyping(1200);
+    setTimeout(() => {
+      const container = document.getElementById('aiMessages');
+      if (container) { const t = container.querySelector('.ai-typing'); if (t) t.remove(); }
+      addAiMessage('ai', AI_OPENING_AI_MSG, true);
+    }, 1400);
+  }, 4900);
+}
+
+/* ── DYNAMIC TAB LABELS ─────────────────────────────────────────── */
+function updateTabLabels() {
+  const hasFlight = planItems.some(it => it.type === 'flight');
+  const hasHotel  = planItems.some(it => it.type === 'hotel');
+  const evtCount  = planItems.filter(it => it.type === 'event' && !it.isAnchor).length;
+  const CHECKSVG  = `<svg viewBox="0 0 12 10" fill="none"><polyline points="1.5,5 4.5,8.5 10.5,1.5"/></svg>`;
+
+  const flightsLabel = document.getElementById('tabFlights')?.querySelector('.tab-label');
+  if (flightsLabel) {
+    const text = hasFlight ? 'BLR → NRT' : 'Flights';
+    flightsLabel.innerHTML = `${text}<span class="tab-check ${hasFlight ? 'done' : ''}">${CHECKSVG}</span>`;
+  }
+
+  const hotelsLabel = document.getElementById('tabHotels')?.querySelector('.tab-label');
+  if (hotelsLabel) {
+    const text = hasHotel ? '1 Hotel' : 'Hotels';
+    hotelsLabel.innerHTML = `${text}<span class="tab-check ${hasHotel ? 'done' : ''}">${CHECKSVG}</span>`;
+  }
+
+  const eventsLabel = document.getElementById('tabEvents')?.querySelector('.tab-label');
+  if (eventsLabel) {
+    const text = evtCount > 0 ? `${evtCount} Event${evtCount !== 1 ? 's' : ''}` : 'Events';
+    eventsLabel.innerHTML = `${text}<span class="tab-check ${evtCount > 0 ? 'done' : ''}">${CHECKSVG}</span>`;
+  }
 }
 
 /* ── PAGE-LEVEL CHECKLIST LOADER ───────────────────────────────── */
@@ -2248,7 +2604,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const badge = document.getElementById('planBadge');
   if (badge) { badge.textContent = 1; badge.classList.add('show'); }
   // Build the horizontal plan strip
-  updateHPlanStrip(); updateTabBadges();
+  updateHPlanStrip(); updateTabBadges(); updateTabLabels();
 
   renderPriceChart();
   renderFlights();
@@ -2261,20 +2617,24 @@ document.addEventListener('DOMContentLoaded', () => {
   initFilters();
   initAiChips();
   initFromTo();
-  initBottomSearch();
+  initAiPanel();
 
-  // Entrance animation — bottom search bar slides up from below
-  const bs = document.getElementById('bottomSearch');
-  if (bs) {
-    bs.style.transition = 'none';
-    bs.style.transform  = 'translateY(100%)';
-    bs.style.opacity    = '0';
-    requestAnimationFrame(() => {
-      requestAnimationFrame(() => {
-        bs.style.transition = 'transform 0.45s cubic-bezier(0.22,1,0.36,1), opacity 0.3s ease';
-        bs.style.transform  = 'translateY(0)';
-        bs.style.opacity    = '1';
-      });
-    });
+  // Float button entrance (slides up from below), then clears inline styles
+  // so CSS class .panel-open { opacity:0 } can take over
+  const btn = document.getElementById('aiFloatBtn');
+  if (btn) {
+    btn.style.transition = 'none';
+    btn.style.transform  = 'translateY(80px)';
+    btn.style.opacity    = '0';
+    requestAnimationFrame(() => requestAnimationFrame(() => {
+      btn.style.transition = 'transform 0.5s cubic-bezier(0.34,1.56,0.64,1), opacity 0.3s ease';
+      btn.style.transform  = 'translateY(0)';
+      btn.style.opacity    = '1';
+      setTimeout(() => {
+        btn.style.removeProperty('transform');
+        btn.style.removeProperty('opacity');
+        btn.style.removeProperty('transition');
+      }, 700);
+    }));
   }
 });
