@@ -1431,24 +1431,7 @@ function highlightPlanDay(di) {
       planMap.fitBounds(bounds, { padding: 90, duration: 500, essential: true });
     }
 
-    // Label popup — cancel any pending timer, then show after fitBounds animation
-    if (planDayLabelTimer) { clearTimeout(planDayLabelTimer); planDayLabelTimer = null; }
-    if (planDayLabel) { planDayLabel.remove(); planDayLabel = null; }
-    planDayLabelTimer = setTimeout(() => {
-      planDayLabelTimer = null;
-      if (!planMap) return;
-      // Use map's actual center after animation so popup sits on the route
-      const center = planMap.getCenter();
-      planDayLabel = new maplibregl.Popup({
-        closeButton: false,
-        closeOnClick: false,
-        className: 'plan-day-popup-wrap',
-        offset: [0, -8],
-      })
-        .setLngLat([center.lng, center.lat])
-        .setHTML(`<strong>${day.label}</strong> · ${day.date} <span style="opacity:.7">${day.dow}</span>`)
-        .addTo(planMap);
-    }, 520);
+    // No day label popup — just fly/fit to route
   }
 }
 
@@ -1470,8 +1453,6 @@ function resetPlanHighlight() {
     el.style.opacity = '1';
   });
 
-  if (planDayLabelTimer) { clearTimeout(planDayLabelTimer); planDayLabelTimer = null; }
-  if (planDayLabel) { planDayLabel.remove(); planDayLabel = null; }
 }
 
 /* Fetch a road-following route from OSRM's free public server.
