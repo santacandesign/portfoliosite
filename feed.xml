@@ -4,8 +4,16 @@
     <title>Santa writes to think</title>
     <description>I write here about everything</description>
     <link>https://santacandesign.github.io/portfoliosite/blog.html</link>
-
-          <item>
+      
+    <item>
+      <title>Weeknote June 22- 27, 2026</title>
+      <link>https://santacandesign.github.io/portfoliosite/blogs/weeknotejune.html</link>
+      <description>cubbon reads inspired me to write this and then it went downhill</description>
+      <pubDate>Sun, 28 Jun 2026 06:20:00 GMT</pubDate>
+      <guid>https://santacandesign.github.io/portfoliosite/blogs/weeknotejune.html</guid>
+    </item>
+      
+      <item>
       <title>Turning 27</title>
       <link>https://santacandesign.github.io/portfoliosite/blogs/birthday.html</link>
       <description>some thoughts and feelings</description>
